@@ -1,0 +1,39 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="64"
+  height="64"
+  viewBox="0 0 64 64"
+  aria-hidden="true"
+  tabindex="-1"
+  style="outline: none"
+>
+  <defs>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f97316" />
+      <stop offset="100%" stop-color="#dc2626" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect x="4" y="4" width="56" height="56" rx="12" fill="url(#logoGradient)" />
+
+  <!-- Center the icon: move to canvas center, then shift by half icon size (24/2 = 12) -->
+  <g transform="translate(32,32) scale(2.2)">
+    <g transform="translate(-12,-12)" fill="none">
+      <path
+        d="M17 21a1 1 0 0 0 1-1v-5.35c0-.457.316-.844.727-1.041a4 4 0 0 0-2.134-7.589 5 5 0 0 0-9.186 0 4 4 0 0 0-2.134 7.588c.411.198.727.585.727 1.041V20a1 1 0 0 0 1 1Z"
+        stroke="white"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M6 17h12"
+        stroke="white"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </g>
+  </g>
+</svg>
