@@ -1,5 +1,5 @@
 import { Moon, Sun } from "lucide-react"
-import { useTheme } from "../../hooks/UseTheme"
+import { useTheme } from "../../hooks/ThemeHooks"
 
 interface ThemeToggleProps {
   scale?: number
