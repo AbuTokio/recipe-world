@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import type { Recipe } from "../interfaces/Recipes"
+import type { Recipe } from "../interfaces/Recipe"
 import { mainContext } from "./MainContext"
 import { getRecipes } from "../functions/GetRecipes"
 
