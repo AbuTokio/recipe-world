@@ -18,7 +18,7 @@ export default function Layout() {
         <Toaster position="top-center" reverseOrder={true} />
       </div>
       {!hide.header.includes(route) && <Header />}
-      <main>
+      <main className="px-4 py-4">
         <Outlet />
       </main>
       {!hide.footer.includes(route) && <Footer />}
