@@ -12,7 +12,7 @@ export default function Header() {
       {bp.isMd && (
         <div className="flex gap-4">
           <Navbar />
-          <ThemeToggle scale={0.5} />
+          <ThemeToggle />
         </div>
       )}
     </header>

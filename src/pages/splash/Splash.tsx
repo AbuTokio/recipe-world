@@ -19,7 +19,7 @@ export default function Splash({ duration = 3000 }: SplashProps) {
   return (
     <>
       <div className="border h-screen w-screen content-center">
-        <DotLottieReact className="mx-auto w-98 bg-white dark:bg-black" src="/foodprep.lottie" loop autoplay />
+        <DotLottieReact className="mx-auto w-98 bg-background" src="/foodprep.lottie" loop autoplay />
       </div>
       {navigate && <Navigate to="/home" />}
     </>
