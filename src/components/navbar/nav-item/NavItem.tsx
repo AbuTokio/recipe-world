@@ -15,11 +15,11 @@ export default function NavItem({ label, icon = null, to = null }: NavItemProps)
         `${
           state.isActive
             ? "bg-primary text-white"
-            : "bg-muted md:bg-transparent text-foreground hover:bg-accent hover:text-foreground"
-        } flex flex-col md:flex-row items-center rounded-t-2xl md:rounded-lg  gap-2 px-3 py-2 text-muted-foreground transition-colors w-24 md:w-auto `
+            : "lg:bg-transparent text-foreground hover:bg-accent hover:text-foreground"
+        } flex flex-col lg:flex-row items-center rounded-t-2xl lg:rounded-lg gap-2 px-3 py-2 text-muted-foreground transition-colors w-20 lg:w-auto`
       }
       to={to || `/${label.toLowerCase()}`}>
-      {icon ? React.createElement(icon, { className: "m-2" }) : label}
+      {icon ? React.createElement(icon, { className: "" }) : label}
       {icon && <span>{label}</span>}
     </NavLink>
   )

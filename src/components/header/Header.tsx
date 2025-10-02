@@ -7,10 +7,10 @@ export default function Header() {
   const bp = useResponsive()
 
   return (
-    <header className="flex flex-col md:flex-row justify-between items-center sticky top-0 z-50 w-full border-b border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60">
+    <header className="px-8 py-4 flex flex-col lg:flex-row justify-between items-center lg:sticky lg:top-0 lg:z-50 w-full lg:border-b lg:border-border lg:bg-card/95 lg:backdrop-blur lg:supports-[backdrop-filter]:bg-card/60">
       <Logo />
-      {bp.isMd && (
-        <div className="flex gap-4">
+      {bp.isLg && (
+        <div className="flex gap-12">
           <Navbar />
           <ThemeToggle />
         </div>

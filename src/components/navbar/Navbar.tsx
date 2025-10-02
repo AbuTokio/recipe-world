@@ -1,9 +1,13 @@
 import { Building2, CookingPot, House, User } from "lucide-react"
 import NavItem from "./nav-item/NavItem"
 
-export default function Navbar() {
+interface NavbarProps {
+  className?: string | null
+}
+
+export default function Navbar({ className = null }: NavbarProps) {
   return (
-    <nav className={`flex gap-4 fixed bottom-0 md:static justify-center items-center w-full`}>
+    <nav className={`flex justify-center items-center w-full ${className !== null && className}`}>
       <NavItem label="Home" icon={House} />
       <NavItem label="Recipes" icon={CookingPot} />
       <NavItem label="About" icon={Building2} />
