@@ -255,7 +255,7 @@
   input:not([class*="text-"]),
   textarea:not([class*="text-"]),
   select:not([class*="text-"]) {
-    @apply text-base font-normal leading-normal;
+    @apply text-base text-foreground font-normal leading-normal;
   }
 
   /* Blockquotes */

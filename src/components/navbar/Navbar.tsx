@@ -1,16 +1,13 @@
 import { Building2, CookingPot, House, User } from "lucide-react"
-import { useResponsive } from "../../hooks/ResponsiveHooks"
 import NavItem from "./nav-item/NavItem"
 
 export default function Navbar() {
-  const bp = useResponsive()
-
   return (
-    <nav className={`flex gap-4`}>
-      <NavItem label="Home" icon={!bp.isMd ? House : null} />
-      <NavItem label="Recipes" icon={!bp.isMd ? CookingPot : null} />
-      <NavItem label="About" icon={!bp.isMd ? Building2 : null} />
-      <NavItem label="Login" icon={!bp.isMd ? User : null} />
+    <nav className={`flex gap-4 fixed bottom-0 md:static justify-center items-center w-full`}>
+      <NavItem label="Home" icon={House} />
+      <NavItem label="Recipes" icon={CookingPot} />
+      <NavItem label="About" icon={Building2} />
+      <NavItem label="Login" icon={User} />
     </nav>
   )
 }
