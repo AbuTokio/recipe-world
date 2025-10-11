@@ -1,3 +1,4 @@
+import { CategoryCard } from "../../components/category-card/CategoryCard"
 import { RecipeCard } from "../../components/recipe-card/RecipeCard"
 
 export default function Home() {
@@ -66,6 +67,16 @@ export default function Home() {
               <RecipeCard key={index} {...recipe} />
             ))}
           </div>
+
+          <CategoryCard
+            name={""}
+            description={""}
+            imageUrl={""}
+            recipeCount={0}
+            onClick={function (): void {
+              throw new Error("Function not implemented.")
+            }}
+          />
 
           {/* Mobile View All Button */}
           <div className="mt-8 text-center md:hidden">
