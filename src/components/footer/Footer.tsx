@@ -41,7 +41,7 @@ export function Footer() {
         </div>
 
         <div className="mt-8 md:mt-12 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-muted-foreground">© 2025 Recipe World. All rights reserved.</p>
+          <p className="text-muted-foreground">&copy; {new Date().getFullYear()} Recipe World. All rights reserved.</p>
           <div className="flex gap-6">
             <Link to="" className="text-muted-foreground hover:text-foreground transition-colors">
               Privacy Policy
