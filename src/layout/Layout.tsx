@@ -2,7 +2,7 @@ import { Outlet, useLocation } from "react-router"
 import Header from "../components/header/Header"
 import { Toaster } from "react-hot-toast"
 import InitialScroll from "../utils/Scroll"
-import Footer from "../components/footer/Footer"
+import { Footer } from "../components/footer/Footer"
 
 export default function Layout() {
   InitialScroll()
