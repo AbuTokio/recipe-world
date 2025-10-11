@@ -1,15 +1,14 @@
-import { Clock, Users, Heart } from "lucide-react"
+import { Users, Heart } from "lucide-react"
 import { useState } from "react"
 
 interface RecipeCardProps {
   title: string
   description: string
   imageUrl: string
-  cookTime: string
   servings: number
 }
 
-export function RecipeCard({ title, description, imageUrl, cookTime, servings }: RecipeCardProps) {
+export function RecipeCard({ title, description, imageUrl, servings }: RecipeCardProps) {
   const [isFavorite, setIsFavorite] = useState(false)
 
   return (
@@ -39,10 +38,6 @@ export function RecipeCard({ title, description, imageUrl, cookTime, servings }:
         <p className="text-muted-foreground mb-4 line-clamp-2">{description}</p>
 
         <div className="flex items-center gap-4 pt-4 border-t border-border">
-          <div className="flex items-center gap-1.5 text-muted-foreground">
-            <Clock className="w-4 h-4" />
-            <span>{cookTime}</span>
-          </div>
           <div className="flex items-center gap-1.5 text-muted-foreground">
             <Users className="w-4 h-4" />
             <span>{servings} servings</span>
