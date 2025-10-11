@@ -5,6 +5,7 @@ import Splash from "./pages/splash/Splash"
 import Recipes from "./pages/recipes/Recipes"
 import Category from "./pages/recipes/category/Category"
 import Detail from "./pages/recipes/detail/Detail"
+import About from "./pages/about/About"
 
 export default function App() {
   const router = createBrowserRouter(
@@ -15,7 +16,7 @@ export default function App() {
         <Route path="recipes" element={<Recipes />} />
         <Route path="recipes/:category" element={<Category />} />
         <Route path="recipes/detail/:id" element={<Detail />} />
-        <Route path="about" element={<div>About</div>} />
+        <Route path="about" element={<About />} />
         <Route path="login" element={<div>Login</div>} />
         <Route path="*" element={<div>404 Not Found</div>} />
       </Route>
