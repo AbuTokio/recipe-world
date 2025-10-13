@@ -9,7 +9,7 @@ export function Footer() {
   const bp = useResponsive()
 
   return (
-    <footer className="w-full border-t border-border bg-card mb-18">
+    <footer className="w-full border-t border-border bg-card mb-18 lg:mb-0">
       {!bp.isLg && (
         <Navbar
           className={

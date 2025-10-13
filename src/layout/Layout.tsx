@@ -10,6 +10,7 @@ export default function Layout() {
   const route = useLocation().pathname
   const hide = {
     header: ["/"],
+    hero: ["/recipes/detail/"],
     footer: ["/"],
   }
 
@@ -20,7 +21,7 @@ export default function Layout() {
       </div>
       {!hide.header.includes(route) && <Header />}
       <main className="px-4 py-4">
-        <Hero />
+        {!route.startsWith(hide.hero[0]) && <Hero />}
         <Outlet />
       </main>
       {!hide.footer.includes(route) && <Footer />}

@@ -15,7 +15,7 @@ export default function App() {
         <Route path="home" element={<Home />} />
         <Route path="recipes" element={<Recipes />} />
         <Route path="recipes/:categoryId" element={<Category />} />
-        <Route path="recipes/detail/:id" element={<Detail />} />
+        <Route path="recipes/detail/:recipeId" element={<Detail />} />
         <Route path="about" element={<About />} />
         <Route path="login" element={<div>Login</div>} />
         <Route path="*" element={<div>404 Not Found</div>} />
