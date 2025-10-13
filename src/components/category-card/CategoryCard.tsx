@@ -1,14 +1,25 @@
 import { ArrowRight } from "lucide-react"
+import { useEffect, useState } from "react"
 import { Link } from "react-router"
+import { getRecipesFromCategory } from "../../functions/GetRecipes"
 
 interface CategoryCardProps {
   name: string
   imageUrl: string
-  recipeCount: number
   categoryId: string
 }
 
-export function CategoryCard({ name, imageUrl, recipeCount, categoryId }: CategoryCardProps) {
+export function CategoryCard({ name, imageUrl, categoryId }: CategoryCardProps) {
+  const [recipeCount, setRecipeCount] = useState<number>(0)
+
+  useEffect(() => {
+    const recipeCount = async () => {
+      const recipes = await getRecipesFromCategory(categoryId)
+      setRecipeCount(recipes.length)
+    }
+    recipeCount()
+  }, [])
+
   return (
     <Link to={`/recipes/${categoryId}`}>
       <article className="group relative bg-card rounded-xl overflow-hidden border border-border hover:shadow-md dark:shadow-border/30 transition-all duration-300 cursor-pointer">
@@ -22,7 +33,9 @@ export function CategoryCard({ name, imageUrl, recipeCount, categoryId }: Catego
           <div className="absolute inset-0 p-6 flex flex-col justify-end">
             <h3 className="text-white mb-2">{name}</h3>
             <div className="flex items-center justify-between">
-              <span className="text-white/70">{recipeCount} recipes</span>
+              <span className="text-white/70">
+                {recipeCount} {recipeCount === 1 ? "recipe" : "recipes"}
+              </span>
               <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur flex items-center justify-center group-hover:bg-primary transition-colors">
                 <ArrowRight className="w-4 h-4 text-white" />
               </div>

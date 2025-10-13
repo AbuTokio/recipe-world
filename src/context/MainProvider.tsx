@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import type { Recipe } from "../interfaces/Recipe"
 import { mainContext } from "./MainContext"
-import { getRecipes } from "../functions/GetRecipes"
+import { getAllRecipes } from "../functions/GetRecipes"
 import type { Category } from "../interfaces/Category"
 import { getCategories } from "../functions/GetCategories"
 
@@ -16,7 +16,7 @@ export default function MainProvider({ children }: { children: React.ReactNode }
 
   useEffect(() => {
     const fetchRecipes = async () => {
-      const recipes = await getRecipes()
+      const recipes = await getAllRecipes()
       setRecipes(recipes)
     }
 

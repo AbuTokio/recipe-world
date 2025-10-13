@@ -1,6 +1,8 @@
+import type { Recipe } from "./Recipe"
+
 export interface Ingredient {
   id: string
-  recipe_id: string
+  recipes: Recipe
   name: string
   quantity?: number | null
   unit?: string | null

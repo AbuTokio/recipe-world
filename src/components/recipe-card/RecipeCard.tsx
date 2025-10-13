@@ -1,22 +1,24 @@
 import { Users, Heart } from "lucide-react"
 import { useState } from "react"
+import { Link } from "react-router"
+import type { Recipe } from "../../interfaces/Recipe"
 
 interface RecipeCardProps {
-  title: string
-  description: string
+  recipe: Recipe
   imageUrl: string
-  servings: number
 }
 
-export function RecipeCard({ title, description, imageUrl, servings }: RecipeCardProps) {
+export function RecipeCard({ recipe, imageUrl }: RecipeCardProps) {
   const [isFavorite, setIsFavorite] = useState(false)
 
   return (
-    <article className="group bg-card rounded-xl overflow-hidden border border-border hover:shadow-md dark:shadow-border/30 transition-all duration-300 cursor-pointer">
+    <Link
+      to={`/recipes/detail/${recipe.id}`}
+      className="group bg-card rounded-xl overflow-hidden border border-border hover:shadow-md dark:shadow-border/30 transition-all duration-300 cursor-pointer">
       <div className="relative aspect-[4/3] overflow-hidden bg-muted">
         <img
           src={imageUrl}
-          alt={title}
+          alt={recipe.name}
           className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500"
         />
 
@@ -33,17 +35,17 @@ export function RecipeCard({ title, description, imageUrl, servings }: RecipeCar
       </div>
 
       <div className="p-5 md:p-6">
-        <h3 className="mb-2 group-hover:text-primary transition-colors">{title}</h3>
+        <h3 className="mb-2 group-hover:text-primary transition-colors">{recipe.name}</h3>
 
-        <p className="text-muted-foreground mb-4 line-clamp-2">{description}</p>
+        <p className="text-muted-foreground mb-4 line-clamp-2">{recipe.description}</p>
 
         <div className="flex items-center gap-4 pt-4 border-t border-border">
           <div className="flex items-center gap-1.5 text-muted-foreground">
             <Users className="w-4 h-4" />
-            <span>{servings} servings</span>
+            <span>{recipe.servings} servings</span>
           </div>
         </div>
       </div>
-    </article>
+    </Link>
   )
 }

@@ -23,7 +23,6 @@ export default function Recipes() {
                 key={category.id}
                 name={category.name}
                 imageUrl={`/img/categories/${category.id}.webp`}
-                recipeCount={0}
                 categoryId={category.id}
               />
             ))}

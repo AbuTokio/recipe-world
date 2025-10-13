@@ -1,17 +1,17 @@
 import { DotLottieReact } from "@lottiefiles/dotlottie-react"
-import { useEffect, useState } from "react"
-import { Navigate } from "react-router"
+import { useEffect } from "react"
+import { useNavigate } from "react-router"
 
 interface SplashProps {
   duration?: number
 }
 
 export default function Splash({ duration = 3000 }: SplashProps) {
-  const [navigate, setNavigate] = useState(false)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setNavigate(true)
+      navigate("/home")
     }, duration)
     return () => clearTimeout(timer)
   }, [duration])
@@ -19,9 +19,8 @@ export default function Splash({ duration = 3000 }: SplashProps) {
   return (
     <>
       <div className="h-screen w-screen content-center">
-        <DotLottieReact className="mx-auto w-98 bg-background" src="/foodprep.lottie" loop autoplay />
+        <DotLottieReact className="mx-auto w-98 bg-background" src="/foodprep.lottie" autoplay />
       </div>
-      {navigate && <Navigate to="/home" />}
     </>
   )
 }
