@@ -10,7 +10,7 @@ export function Logo({ size = "default" }: LogoProps) {
       container: "gap-2",
       icon: "w-6 h-6",
       text: "text-xl",
-      subtext: "text-xs",
+      subtext: "text-[8px]",
     },
     default: {
       container: "gap-3",

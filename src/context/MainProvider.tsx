@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import type { Recipe } from "../interfaces/Recipe"
-import { mainContext } from "./MainContext"
+import { mainContext } from "./Contexts"
 import { getAllRecipes } from "../functions/GetRecipes"
 import type { Category } from "../interfaces/Category"
 import { getCategories } from "../functions/GetCategories"

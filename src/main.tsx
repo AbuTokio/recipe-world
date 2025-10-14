@@ -3,11 +3,14 @@ import { createRoot } from "react-dom/client"
 import "./index.css"
 import App from "./App.tsx"
 import MainProvider from "./context/MainProvider.tsx"
+import ThemeProvider from "./context/ThemeProvider.tsx"
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <MainProvider>
-      <App />
+      <ThemeProvider>
+        <App />
+      </ThemeProvider>
     </MainProvider>
   </StrictMode>
 )

@@ -4,6 +4,7 @@ import { Logo } from "../logo/Logo"
 import Navbar from "../navbar/Navbar"
 import SocialLink from "../social-link/SocialLink"
 import { Link } from "react-router"
+import ThemeToggle from "../theme-toggle/ThemeToggle"
 
 export function Footer() {
   const bp = useResponsive()
@@ -28,15 +29,22 @@ export function Footer() {
             </p>
           </div>
 
-          <div>
-            <h4 className="mb-4">Follow Us</h4>
-            <div className="flex flex-wrap gap-3">
-              <SocialLink to="https://www.youtube.com/" icon={Youtube} />
-              <SocialLink to="https://www.instagram.com/" icon={Instagram} />
-              <SocialLink to="https://www.facebook.com/" icon={Facebook} />
-              <SocialLink to="https://www.x.com/" icon={Twitter} />
-              {/* TODO: find alternative for social icons, brand icons are depraced in lucide and will be removed */}
+          <div className="flex justify-between">
+            <div>
+              <h4 className="mb-4">Follow Us</h4>
+              <div className="flex flex-wrap gap-3">
+                <SocialLink to="https://www.youtube.com/" icon={Youtube} />
+                <SocialLink to="https://www.instagram.com/" icon={Instagram} />
+                <SocialLink to="https://www.facebook.com/" icon={Facebook} />
+                <SocialLink to="https://www.x.com/" icon={Twitter} />
+                {/* TODO: find alternative for social icons, brand icons are depraced in lucide and will be removed */}
+              </div>
             </div>
+            {!bp.isMd && (
+              <div className="place-self-end">
+                <ThemeToggle />
+              </div>
+            )}
           </div>
         </div>
 
