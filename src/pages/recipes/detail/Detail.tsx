@@ -1,13 +1,15 @@
-import { Users, Heart, Calendar } from "lucide-react"
+import { Users, Heart, Calendar, Edit } from "lucide-react"
 import { useEffect, useState } from "react"
 import { getIngredientsByRecipeId } from "../../../functions/GetRecipes"
-import { useParams } from "react-router"
+import { useNavigate, useParams } from "react-router"
 import type { Ingredient } from "../../../interfaces/Ingredient"
+import { Button } from "../../../components/button/Button"
 
 export default function Detail() {
   const { recipeId } = useParams()
   const [isFavorite, setIsFavorite] = useState(false)
   const [ingredients, setIngredients] = useState<Ingredient[] | null>(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (recipeId) {
@@ -30,7 +32,7 @@ export default function Detail() {
   }
 
   // Parse instructions into steps
-  const instructionSteps = ingredients?.[0]?.recipes.instructions
+  const instructionSteps = ingredients?.[0]?.recipes?.instructions
     .split(/\d+\./)
     .filter((step) => step.trim().length > 0)
     .map((step) => step.trim())
@@ -40,8 +42,8 @@ export default function Detail() {
       {/* Hero Image Section */}
       <div className="relative w-full h-[300px] md:h-[400px] lg:h-[500px] bg-muted">
         <img
-          src={`/img/recipes/${ingredients?.[0]?.recipes.id}.webp`}
-          alt={ingredients?.[0]?.recipes.name}
+          src={`/img/recipes/${ingredients?.[0]?.recipes?.id}.webp`}
+          alt={ingredients?.[0]?.recipes?.name}
           className="w-full h-full object-cover"
         />
 
@@ -63,24 +65,28 @@ export default function Detail() {
         <div className="max-w-4xl mx-auto">
           {/* Header Section */}
           <div className="mb-8 md:mb-12">
-            <div className="flex flex-wrap items-center gap-3 mb-4">
-              {ingredients?.[0]?.recipes.categories.name}
+            <div className="flex flex-wrap justify-between items-center gap-3 mb-4">
+              {ingredients?.[0]?.recipes?.categories.name}
+              <Button variant="outline" size="sm" onClick={() => navigate(`/recipes/edit/${recipeId}`)}>
+                <Edit className="w-4 h-4 mr-2" />
+                Edit Recipe
+              </Button>
               {/* TODO: wrap in a Badge Component */}
             </div>
 
-            <h1 className="mb-4">{ingredients?.[0]?.recipes.name}</h1>
+            <h1 className="mb-4">{ingredients?.[0]?.recipes?.name}</h1>
 
-            <p className="text-muted-foreground mb-6">{ingredients?.[0]?.recipes.description}</p>
+            <p className="text-muted-foreground mb-6">{ingredients?.[0]?.recipes?.description}</p>
 
             {/* Meta Information */}
             <div className="flex flex-wrap items-center gap-6 text-muted-foreground">
               <div className="flex items-center gap-2">
                 <Users className="w-5 h-5" />
-                <span>{ingredients?.[0]?.recipes.servings} servings</span>
+                <span>{ingredients?.[0]?.recipes?.servings} servings</span>
               </div>
               <div className="flex items-center gap-2">
                 <Calendar className="w-5 h-5" />
-                <span>{formatDate(String(ingredients?.[0]?.recipes.created_at))}</span>
+                <span>{formatDate(String(ingredients?.[0]?.recipes?.created_at))}</span>
               </div>
             </div>
           </div>
