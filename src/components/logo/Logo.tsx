@@ -30,7 +30,7 @@ export function Logo({ size = "default" }: LogoProps) {
 
   return (
     <div className={`flex items-center select-none ${classes.container}`}>
-      <Icon className={classes.icon} />
+      <Icon className={classes.icon} size={size} />
 
       <div className="flex flex-col">
         <div className="flex items-baseline gap-1">

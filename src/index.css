@@ -200,7 +200,7 @@
   }
 
   body {
-    @apply bg-background text-foreground min-h-[200vh] transition-colors duration-300;
+    @apply bg-background text-foreground min-h-[100vh] transition-colors duration-300;
     font-family: var(--font-family-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

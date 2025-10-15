@@ -4,6 +4,7 @@ import { getIngredientsByRecipeId } from "../../../functions/GetRecipes"
 import { useNavigate, useParams } from "react-router"
 import type { Ingredient } from "../../../interfaces/Ingredient"
 import { Button } from "../../../components/button/Button"
+import { FormatDate } from "../../../utils/FormatDate"
 
 export default function Detail() {
   const { recipeId } = useParams()
@@ -20,16 +21,6 @@ export default function Detail() {
       getIngredientsData()
     }
   }, [recipeId])
-
-  // Format the date
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString)
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    })
-  }
 
   // Parse instructions into steps
   const instructionSteps = ingredients?.[0]?.recipes?.instructions
@@ -86,7 +77,7 @@ export default function Detail() {
               </div>
               <div className="flex items-center gap-2">
                 <Calendar className="w-5 h-5" />
-                <span>{formatDate(String(ingredients?.[0]?.recipes?.created_at))}</span>
+                <span>{FormatDate(String(ingredients?.[0]?.recipes?.created_at))}</span>
               </div>
             </div>
           </div>
