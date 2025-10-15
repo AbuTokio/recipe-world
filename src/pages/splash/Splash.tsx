@@ -18,7 +18,7 @@ export default function Splash({ duration = 3000 }: SplashProps) {
 
   return (
     <>
-      <div className="h-screen w-screen content-center">
+      <div className="absolute top-0 left-0 right-0 bottom-0 content-center">
         <DotLottieReact className="mx-auto w-98 bg-background" src="/foodprep.lottie" autoplay />
       </div>
     </>

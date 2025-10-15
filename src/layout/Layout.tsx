@@ -16,7 +16,7 @@ export default function Layout() {
 
   return (
     <>
-      <div className="absolute -top-10 bg-white w-10 h-10 z-999">
+      <div className="absolute -top-10 bg-transparent w-10 h-10 z-999">
         <Toaster position="top-center" reverseOrder={true} />
       </div>
       {!hide.header.includes(route) && <Header />}
