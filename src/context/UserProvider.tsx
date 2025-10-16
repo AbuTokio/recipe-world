@@ -28,13 +28,13 @@ export default function UserProvider({ children }: { children: React.ReactNode }
     const {
       data: { user },
     } = await supabase.auth.getUser()
-    // console.log(user)
 
     if (user) {
       const { data: userData, error } = await supabase.from("users").select("*").eq("id", user.id)
       if (error) console.error("Fehler beim Laden des Users:", error)
       else setUser(userData?.[0])
     }
+    console.log(user)
   }
 
   useEffect(() => {
@@ -56,8 +56,9 @@ export default function UserProvider({ children }: { children: React.ReactNode }
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      // setUser(session?.user as unknown as User) // Bug: wenn man das fenster minimiert und wieder maximiert, dann sind die user daten weg
+      setUser(session?.user as unknown as User)
       setIsLoggedIn(!!session?.user)
+      if (session?.user) fetchUserData()
       setLoading(false)
     })
 
@@ -66,10 +67,6 @@ export default function UserProvider({ children }: { children: React.ReactNode }
     return () => {
       subscription.unsubscribe()
     }
-  }, [])
-
-  useEffect(() => {
-    fetchUserData()
   }, [])
 
   const fetchFavorites = async () => {

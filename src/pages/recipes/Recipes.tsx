@@ -1,12 +1,14 @@
 import { Plus } from "lucide-react"
 import { Button } from "../../components/button/Button"
 import { CategoryCard } from "../../components/category-card/CategoryCard"
-import { useMain } from "../../hooks/ContextHooks"
+import { useMain, useUser } from "../../hooks/ContextHooks"
 import { useResponsive } from "../../hooks/ResponsiveHooks"
 import { useNavigate } from "react-router"
+import toast from "react-hot-toast"
 
 export default function Recipes() {
   const ctx = useMain()
+  const { user } = useUser()
   const bp = useResponsive()
   const navigate = useNavigate()
 
@@ -20,7 +22,15 @@ export default function Recipes() {
               <h2 className="mb-2">Explore Categories</h2>
               <p className="text-muted-foreground">Discover recipes by meal type and cuisine</p>
             </div>
-            <Button size={!bp.isMd ? "sm" : "md"} onClick={() => navigate("/recipes/add")}>
+            <Button
+              size={!bp.isMd ? "sm" : "md"}
+              onClick={() => {
+                if (user) navigate("/recipes/add")
+                else {
+                  toast.error("Please log in to add a recipe")
+                  navigate("/login")
+                }
+              }}>
               <Plus className="w-4 h-4 mr-2" />
               Add Recipe
             </Button>

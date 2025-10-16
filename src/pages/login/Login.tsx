@@ -13,12 +13,15 @@ export default function Login() {
 
   const handleLogin = async (loginData: { email: string; password: string }) => {
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { error } = await supabase.auth.signInWithPassword({
         email: loginData.email,
         password: loginData.password,
       })
-      if (error) console.error("Fehler beim Login:", error)
-      console.log("Login war erfolgreich:", data)
+      if (error) {
+        toast.error("Login failed. Please check your credentials.")
+        return
+      }
+      toast.success("Welcome back!")
       navigate("/profile")
     } catch (error) {
       console.error("Fehler beim Login:", error)
@@ -41,7 +44,7 @@ export default function Login() {
         signUpData.firstname,
         signUpData.lastname
       )
-      const { data, error } = await supabase.auth.signUp({
+      const { error } = await supabase.auth.signUp({
         email: signUpData.email,
         password: signUpData.password,
         options: {
@@ -52,8 +55,11 @@ export default function Login() {
           },
         },
       })
-      if (error) console.error("Fehler beim SignUp:", error)
-      console.log("SignUp war erfolgreich:", data)
+      if (error) {
+        toast.error("Sign up failed. Please try again.")
+        return
+      }
+      toast.success("Account created! Welcome!")
       navigate("/profile")
     } catch (error) {
       console.error("Fehler beim SignUp:", error)
@@ -86,7 +92,6 @@ export default function Login() {
       }
 
       await handleLogin(formValues)
-      toast.success("Welcome back!")
     } else {
       // Signup validation
       if (!formValues.firstname.trim() || !formValues.lastname.trim()) {
@@ -111,17 +116,11 @@ export default function Login() {
       }
 
       await handleSignUp(formValues)
-      toast.success("Account created successfully!")
-
-      setTimeout(() => {
-        // After signup, switch to login mode or redirect as needed
-      }, 1000)
     }
   }
 
   const switchMode = () => {
     setIsLogin(!isLogin)
-    // Clear form fields when switching
     formRef.current?.reset()
     setShowPassword(false)
   }
