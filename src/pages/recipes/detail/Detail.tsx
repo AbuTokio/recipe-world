@@ -1,16 +1,47 @@
-import { Users, Heart, Calendar, Edit } from "lucide-react"
+import { Users, Heart, Calendar, Edit, LoaderCircle } from "lucide-react"
 import { useEffect, useState } from "react"
 import { getIngredientsByRecipeId } from "../../../functions/GetRecipes"
 import { useNavigate, useParams } from "react-router"
 import type { Ingredient } from "../../../interfaces/Ingredient"
 import { Button } from "../../../components/button/Button"
 import { FormatDate } from "../../../utils/FormatDate"
+import toast from "react-hot-toast"
+import { useUser } from "../../../hooks/ContextHooks"
+import { toggleFavorite } from "../../../functions/ToggleFavorites"
 
 export default function Detail() {
   const { recipeId } = useParams()
   const [isFavorite, setIsFavorite] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const [ingredients, setIngredients] = useState<Ingredient[] | null>(null)
   const navigate = useNavigate()
+
+  const { user, favorites, fetchFavorites } = useUser()
+
+  const handleFavoriteClick = async (e: React.MouseEvent) => {
+    e.preventDefault()
+    setIsLoading(true)
+    if (!user) {
+      toast.error("Please log in to add favorites")
+      return
+    }
+    try {
+      if (!user?.id) throw new Error("User ID is undefined")
+      await toggleFavorite(recipeId!, user.id)
+      setIsFavorite(!isFavorite)
+      toast.success(isFavorite ? "Removed from favorites" : "Added to favorites")
+    } catch (error) {
+      toast.error("An error occurred. Please try again.")
+    }
+    await fetchFavorites()
+    setIsLoading(false)
+  }
+
+  useEffect(() => {
+    if (user && favorites.some((fav) => fav.recipes.id === recipeId)) {
+      setIsFavorite(true)
+    }
+  }, [favorites])
 
   useEffect(() => {
     if (recipeId) {
@@ -40,14 +71,20 @@ export default function Detail() {
 
         {/* Favorite Button */}
         <button
-          onClick={() => setIsFavorite(!isFavorite)}
+          onClick={(e) => {
+            if (!isLoading) handleFavoriteClick(e)
+          }}
           className="absolute top-6 right-6 w-12 h-12 md:w-14 md:h-14 rounded-full bg-card/90 backdrop-blur flex items-center justify-center hover:bg-card transition-colors shadow-lg"
           aria-label="Add to favorites">
-          <Heart
-            className={`w-6 h-6 transition-colors ${
-              isFavorite ? "fill-primary text-primary" : "text-muted-foreground"
-            }`}
-          />
+          {isLoading ? (
+            <LoaderCircle className={`w-5 h-5 transition-colors text-primary animate-spin`} />
+          ) : (
+            <Heart
+              className={`w-6 h-6 transition-colors ${
+                isFavorite ? "fill-primary text-primary" : "text-muted-foreground"
+              }`}
+            />
+          )}
         </button>
       </div>
 
@@ -57,12 +94,22 @@ export default function Detail() {
           {/* Header Section */}
           <div className="mb-8 md:mb-12">
             <div className="flex flex-wrap justify-between items-center gap-3 mb-4">
+              {/* TODO: wrap in a Badge Component */}
               {ingredients?.[0]?.recipes?.categories.name}
-              <Button variant="outline" size="sm" onClick={() => navigate(`/recipes/edit/${recipeId}`)}>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  // TODO: only allow edit if user is the author of the recipe
+                  if (user) navigate(`/recipes/edit/${recipeId}`)
+                  else {
+                    toast.error("Please log in to edit a recipe")
+                    navigate("/login")
+                  }
+                }}>
                 <Edit className="w-4 h-4 mr-2" />
                 Edit Recipe
               </Button>
-              {/* TODO: wrap in a Badge Component */}
             </div>
 
             <h1 className="mb-4">{ingredients?.[0]?.recipes?.name}</h1>
