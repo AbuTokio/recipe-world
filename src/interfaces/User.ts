@@ -6,6 +6,6 @@ export interface User {
   lastname: string
   email: string
   password: string
-  img_url?: string
+  img_url: string
   created_at?: string
 }

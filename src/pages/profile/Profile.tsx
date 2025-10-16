@@ -1,17 +1,22 @@
-import { User, Mail, Calendar, Settings, LogOut } from "lucide-react"
+import { User, Mail, Calendar, Settings, LogOut, Save } from "lucide-react"
 import { useUser } from "../../hooks/ContextHooks"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import supabase from "../../utils/supabase"
 import { FormatDate } from "../../utils/FormatDate"
 import { useNavigate } from "react-router"
 import { Button } from "../../components/button/Button"
 import Skeleton from "../../components/skeleton/Skeleton"
+import { uploadProfilePicture } from "../../functions/UploadPicture"
 
 export default function Profile() {
   const [isEditing, setIsEditing] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [profilePicture, setProfilePicture] = useState<File | null>(null)
+  const [newUsername, setNewUsername] = useState("")
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
+  const usernameChangeRef = useRef<HTMLInputElement | null>(null)
 
-  const { user, setIsLoggedIn, favorites } = useUser()
+  const { user, setUser, setIsLoggedIn, favorites } = useUser()
   const navigate = useNavigate()
 
   const handleLogOut = async () => {
@@ -28,6 +33,59 @@ export default function Profile() {
     setTimeout(() => setLoading(false), 1000)
   }, [user])
 
+  const handleButtonClick = () => {
+    fileInputRef.current?.click()
+  }
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file || !user) return
+
+    setProfilePicture(file)
+  }
+
+  async function handleUploadProfilePicture() {
+    console.log(profilePicture)
+    console.log(user)
+    if (!profilePicture || !user) return null
+
+    try {
+      const imgUrl = await uploadProfilePicture(profilePicture)
+
+      if (imgUrl) {
+        setUser((prev) => (prev ? { ...prev, img_url: imgUrl } : prev))
+
+        await supabase.from("users").update({ img_url: imgUrl }).eq("id", user.id)
+      }
+    } catch (error) {
+      console.error("Fehler beim Foto upload", error)
+    }
+  }
+
+  useEffect(() => {
+    if (profilePicture) {
+      handleUploadProfilePicture()
+    }
+  }, [profilePicture])
+
+  useEffect(() => {
+    if (isEditing) {
+      usernameChangeRef.current?.focus()
+    } else if (user && newUsername !== user.username) {
+      supabase
+        .from("users")
+        .update({ username: newUsername })
+        .eq("id", user.id)
+        .then(({ error }) => {
+          if (error) {
+            console.error("Fehler beim Speichern", error)
+          } else {
+            setUser((prev) => (prev ? { ...prev, username: newUsername } : prev))
+          }
+        })
+    }
+  }, [isEditing])
+
   return (
     <div className="py-12 md:py-16 lg:py-20">
       {/* Header */}
@@ -38,11 +96,31 @@ export default function Profile() {
             <div className="bg-card rounded-2xl border border-border p-6 md:p-8 shadow-lg">
               <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
                 {/* Avatar */}
-                <div className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center text-primary-foreground flex-shrink-0 overflow-hidden">
-                  {user?.img_url ? (
+                <div className="relative w-24 h-24 md:w-32 md:h-32 rounded-full bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center text-primary-foreground flex-shrink-0 overflow-hidden">
+                  {loading ? (
+                    <Skeleton />
+                  ) : user?.img_url ? (
                     <img src={user.img_url} alt="User Avatar" className="w-full h-full object-cover" />
                   ) : (
                     <User className="w-12 h-12 md:w-16 md:h-16" />
+                  )}
+                  {isEditing && (
+                    <>
+                      {" "}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        ref={fileInputRef}
+                        onChange={handleFileChange}
+                        style={{ display: "none" }}
+                      />
+                      <button
+                        type="button"
+                        className="absolute bottom-0 left-0 right-0 bg-card-foreground text-muted text-xs px-2 py-1 rounded hover:bg-accent cursor-pointer"
+                        onClick={handleButtonClick}>
+                        Upload
+                      </button>
+                    </>
                   )}
                 </div>
 
@@ -57,6 +135,18 @@ export default function Profile() {
                     <div className="flex items-center gap-2 justify-center md:justify-start">
                       {loading ? (
                         <Skeleton height={16} width={100} />
+                      ) : isEditing ? (
+                        <>
+                          <input
+                            ref={usernameChangeRef}
+                            type="text"
+                            defaultValue={user?.username}
+                            onChange={(e) => {
+                              setNewUsername(e.target.value)
+                            }}
+                            className="px-2 py-1 border border-border rounded bg-card text-primary focus:outline-none focus:ring-2 focus:ring-primary w-full"
+                          />
+                        </>
                       ) : (
                         <>
                           <User className="w-4 h-4" />
@@ -94,8 +184,18 @@ export default function Profile() {
                   <Button
                     className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-opacity flex items-center gap-2"
                     onClick={() => setIsEditing(!isEditing)}>
-                    <Settings className="w-4 h-4" />
-                    <span className="hidden sm:inline">Settings</span>
+                    {isEditing ? (
+                      <>
+                        <Save className="w-4 h-4" />
+                        <span className="hidden sm:inline">Save</span>
+                      </>
+                    ) : (
+                      <>
+                        {" "}
+                        <Settings className="w-4 h-4" />
+                        <span className="hidden sm:inline">Settings</span>
+                      </>
+                    )}
                   </Button>
                 </div>
               </div>
@@ -108,7 +208,7 @@ export default function Profile() {
       <section className="py-12 md:py-16">
         <div className="container mx-auto px-4 md:px-6 lg:px-8 max-w-4xl">
           <h2 className="">Your Stats</h2>
-          <h3 className="text-muted mb-8">Click for more details</h3>
+          <h3 className="text-muted-foreground mb-8">Click for more details</h3>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
             {loading ? (
