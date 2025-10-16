@@ -6,27 +6,13 @@ import { FormatDate } from "../../utils/FormatDate"
 import { useNavigate } from "react-router"
 import { Button } from "../../components/button/Button"
 import Skeleton from "../../components/skeleton/Skeleton"
-import { getFavoriteRecipesByUserId } from "../../functions/GetRecipes"
 
 export default function Profile() {
   const [isEditing, setIsEditing] = useState(false)
   const [loading, setLoading] = useState(true)
 
-  const { user, setUser, setIsLoggedIn, favorites, setFavorites } = useUser()
+  const { user, setIsLoggedIn, favorites } = useUser()
   const navigate = useNavigate()
-
-  const fetchUserData = async () => {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
-    // console.log(user)
-
-    if (user) {
-      const { data: userData, error } = await supabase.from("users").select("*").eq("id", user.id)
-      if (error) console.error("Fehler beim Laden des Users:", error)
-      else setUser(userData?.[0] || null)
-    }
-  }
 
   const handleLogOut = async () => {
     const { error } = await supabase.auth.signOut()
@@ -38,20 +24,7 @@ export default function Profile() {
   }
 
   useEffect(() => {
-    fetchUserData()
-  }, [])
-
-  const fetchFavorites = async () => {
-    if (user?.id) {
-      const result = await getFavoriteRecipesByUserId(user.id)
-      console.log(result)
-      setFavorites(result)
-    }
-  }
-
-  useEffect(() => {
-    fetchFavorites()
-    setLoading(false)
+    setTimeout(() => setLoading(false), 1000)
   }, [user])
 
   return (

@@ -4,6 +4,7 @@ import type { User } from "../interfaces/User"
 import { useEffect, useState } from "react"
 import supabase from "../utils/supabase"
 import type { Favorite } from "../interfaces/Favorites"
+import { getFavoriteRecipesByUserId } from "../functions/GetRecipes"
 
 export interface UserContextProps {
   user: User | null
@@ -13,6 +14,8 @@ export interface UserContextProps {
   loading: boolean
   favorites: Favorite[]
   setFavorites: React.Dispatch<React.SetStateAction<Favorite[]>>
+  fetchUserData: () => Promise<void>
+  fetchFavorites: () => Promise<void>
 }
 
 export default function UserProvider({ children }: { children: React.ReactNode }) {
@@ -20,6 +23,19 @@ export default function UserProvider({ children }: { children: React.ReactNode }
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [loading, setLoading] = useState(true)
   const [favorites, setFavorites] = useState<Favorite[]>([])
+
+  const fetchUserData = async () => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+    // console.log(user)
+
+    if (user) {
+      const { data: userData, error } = await supabase.from("users").select("*").eq("id", user.id)
+      if (error) console.error("Fehler beim Laden des Users:", error)
+      else setUser(userData?.[0])
+    }
+  }
 
   useEffect(() => {
     const checkSession = async () => {
@@ -52,6 +68,24 @@ export default function UserProvider({ children }: { children: React.ReactNode }
     }
   }, [])
 
+  useEffect(() => {
+    fetchUserData()
+  }, [])
+
+  const fetchFavorites = async () => {
+    if (user?.id) {
+      const result = await getFavoriteRecipesByUserId(user.id)
+      console.log(result)
+      setFavorites(result)
+    }
+  }
+
+  useEffect(() => {
+    if (user) {
+      fetchFavorites()
+    }
+  }, [user])
+
   const value: UserContextProps = {
     user,
     setUser,
@@ -60,6 +94,8 @@ export default function UserProvider({ children }: { children: React.ReactNode }
     loading,
     favorites,
     setFavorites,
+    fetchUserData,
+    fetchFavorites,
   }
   return <userContext.Provider value={value}>{children}</userContext.Provider>
 }
