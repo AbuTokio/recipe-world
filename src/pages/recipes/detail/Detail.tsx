@@ -1,4 +1,4 @@
-import { Users, Heart, Calendar, Edit, LoaderCircle } from "lucide-react"
+import { Users, Heart, Calendar, Edit, LoaderCircle, User } from "lucide-react"
 import { useEffect, useState } from "react"
 import { getIngredientsByRecipeId } from "../../../functions/GetRecipes"
 import { useNavigate, useParams } from "react-router"
@@ -8,6 +8,7 @@ import { FormatDate } from "../../../utils/FormatDate"
 import toast from "react-hot-toast"
 import { useUser } from "../../../hooks/ContextHooks"
 import { toggleFavorite } from "../../../functions/ToggleFavorites"
+import Separator from "../../../components/separator/Separator"
 
 export default function Detail() {
   const { recipeId } = useParams()
@@ -101,7 +102,6 @@ export default function Detail() {
                   variant="outline"
                   size="sm"
                   onClick={() => {
-                    // TODO: only allow edit if user is the author of the recipe
                     if (user) navigate(`/recipes/edit/${recipeId}`)
                     else {
                       toast.error("Please log in to edit a recipe")
@@ -125,13 +125,17 @@ export default function Detail() {
                 <span>{ingredients?.[0]?.recipes?.servings} servings</span>
               </div>
               <div className="flex items-center gap-2">
+                <User className="w-5 h-5" />
+                <span>{ingredients?.[0]?.recipes?.users?.username || "Unknown"}</span>
+              </div>
+              <div className="flex items-center gap-2">
                 <Calendar className="w-5 h-5" />
                 <span>{FormatDate(String(ingredients?.[0]?.recipes?.created_at))}</span>
               </div>
             </div>
           </div>
 
-          {/* <Separator className="mb-8 md:mb-12" /> */}
+          <Separator className="mb-8 md:mb-12" />
 
           {/* Two Column Layout for Desktop */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12">
