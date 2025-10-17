@@ -1,13 +1,16 @@
 import { ArrowLeft, Plus, X } from "lucide-react"
 import { useEffect, useState } from "react"
 import type { Ingredient } from "../../../interfaces/Ingredient"
-import { useMain } from "../../../hooks/ContextHooks"
+import { useMain, useUser } from "../../../hooks/ContextHooks"
 import toast from "react-hot-toast"
 import { FormInput } from "../../../components/form/form-input/FormInput"
 import { FormTextArea } from "../../../components/form/form-text-area/FormTextArea"
 import { FormSelect } from "../../../components/form/form-select/FormSelect"
 import type { Category } from "../../../interfaces/Category"
 import { Button } from "../../../components/button/Button"
+import { addRecipe } from "../../../functions/AddRecipe"
+import { useNavigate } from "react-router"
+import supabase from "../../../utils/supabase"
 
 export default function AddRecipe() {
   const [recipeName, setRecipeName] = useState("")
@@ -17,7 +20,10 @@ export default function AddRecipe() {
   const [instructions, setInstructions] = useState("")
   const [ingredients, setIngredients] = useState<Ingredient[]>([])
 
+  const navigate = useNavigate()
+
   const ctx = useMain()
+  const { user } = useUser()
 
   const addIngredient = () => {
     setIngredients([
@@ -73,19 +79,36 @@ export default function AddRecipe() {
       return
     }
 
-    // TODO: send data to backend
-    console.log({
-      name: recipeName,
-      description,
-      servings: parseInt(servings),
-      category,
-      instructions,
-      ingredients: ingredients.filter((ing) => ing.name.trim()),
+    addRecipe(
+      {
+        name: recipeName,
+        description: description,
+        servings: parseInt(servings),
+        category_id: category,
+        instructions: instructions,
+        user_id: user?.id || null,
+      },
+      ingredients
+    ).then(() => {
+      toast.success("Recipe created successfully!")
     })
 
-    toast.success("Recipe created successfully!")
+    const goToRecipe = async () => {
+      const { data } = await supabase
+        .from("recipes")
+        .select("id")
+        .eq("name", recipeName)
+        .eq("user_id", user?.id || null)
+        .eq("instructions", instructions)
+        .eq("description", description)
+        .eq("servings", parseInt(servings))
+        .eq("category_id", category)
+        .single()
 
-    // TODO: navigate to recipe detail page
+      navigate(`/recipes/detail/${data?.id}`)
+    }
+
+    goToRecipe()
   }
 
   useEffect(() => {
@@ -253,23 +276,7 @@ export default function AddRecipe() {
               <Button type="button" variant="outline">
                 Cancel
               </Button>
-              <Button
-                type="submit"
-                className="sm:ml-auto"
-                onClick={() => {
-                  // recipeName,
-                  // description,
-                  // servings,
-                  // category,
-                  // instructions,
-                  // ingredients
-                  console.log("recipeName:", recipeName)
-                  console.log("description:", description)
-                  console.log("servings:", servings)
-                  console.log("category:", category)
-                  console.log("instructions:", instructions)
-                  console.log("ingredients:", ingredients)
-                }}>
+              <Button type="submit" className="sm:ml-auto" onClick={handleSubmit}>
                 Create Recipe
               </Button>
             </div>

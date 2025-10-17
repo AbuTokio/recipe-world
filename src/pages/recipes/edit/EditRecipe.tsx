@@ -1,16 +1,17 @@
 import { ArrowLeft, Plus, Trash2, X } from "lucide-react"
 import { useEffect, useState } from "react"
 import type { Ingredient } from "../../../interfaces/Ingredient"
-import { useMain } from "../../../hooks/ContextHooks"
+import { useMain, useUser } from "../../../hooks/ContextHooks"
 import toast from "react-hot-toast"
 import { FormInput } from "../../../components/form/form-input/FormInput"
 import { FormTextArea } from "../../../components/form/form-text-area/FormTextArea"
 import { FormSelect } from "../../../components/form/form-select/FormSelect"
 import type { Category } from "../../../interfaces/Category"
 import { Button } from "../../../components/button/Button"
-import { useParams } from "react-router"
+import { useNavigate, useParams } from "react-router"
 import { getIngredientsByRecipeId } from "../../../functions/GetRecipes"
 import { ConfirmDialog } from "../../../components/confirm-dialog/ConfirmDialog"
+import { updateRecipe } from "../../../functions/AddRecipe"
 
 export default function EditRecipe() {
   const { recipeId } = useParams()
@@ -22,7 +23,11 @@ export default function EditRecipe() {
   const [ingredients, setIngredients] = useState<Ingredient[]>([])
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
 
+  const navigate = useNavigate()
+
   const ctx = useMain()
+
+  const { user } = useUser()
 
   const addIngredient = () => {
     setIngredients([
@@ -31,6 +36,7 @@ export default function EditRecipe() {
         id: String(ingredients.length),
         name: "",
         quantity: null,
+        recipe_id: recipeId!,
         unit: "",
         additional_info: "",
       },
@@ -78,19 +84,21 @@ export default function EditRecipe() {
       return
     }
 
-    // TODO: send data to backend
-    console.log({
-      name: recipeName,
-      description,
-      servings: parseInt(servings),
-      category,
-      instructions,
-      ingredients: ingredients.filter((ing) => ing.name.trim()),
+    updateRecipe(
+      {
+        id: recipeId!,
+        name: recipeName,
+        description: description,
+        servings: parseInt(servings),
+        category_id: category,
+        instructions: instructions,
+        user_id: user?.id || null,
+      },
+      ingredients
+    ).then(() => {
+      toast.success("Recipe updated successfully!")
+      navigate(`/recipes/detail/${recipeId}`)
     })
-
-    toast.success("Recipe created successfully!")
-
-    // TODO: navigate to recipe detail page
   }
 
   const handleDelete = () => {
@@ -114,7 +122,7 @@ export default function EditRecipe() {
         if (ingredients?.[0]?.recipes?.name) setRecipeName(ingredients?.[0]?.recipes?.name)
         if (ingredients?.[0]?.recipes?.description) setDescription(ingredients?.[0]?.recipes?.description)
         if (ingredients?.[0]?.recipes?.servings) setServings(String(ingredients?.[0]?.recipes?.servings))
-        if (ingredients?.[0]?.recipes?.categories.id) setCategory(ingredients?.[0]?.recipes?.categories.name)
+        if (ingredients?.[0]?.recipes?.categories?.id) setCategory(ingredients?.[0]?.recipes?.categories.name)
         if (ingredients?.[0]?.recipes?.instructions) setInstructions(ingredients?.[0]?.recipes?.instructions)
         if (ingredients) setIngredients(ingredients)
       }
@@ -290,26 +298,10 @@ export default function EditRecipe() {
 
             {/* Actions */}
             <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-border">
-              <Button type="button" variant="outline">
+              <Button type="button" variant="outline" onClick={() => navigate(-1)}>
                 Cancel
               </Button>
-              <Button
-                type="submit"
-                className="sm:ml-auto"
-                onClick={() => {
-                  // recipeName,
-                  // description,
-                  // servings,
-                  // category,
-                  // instructions,
-                  // ingredients
-                  console.log("recipeName:", recipeName)
-                  console.log("description:", description)
-                  console.log("servings:", servings)
-                  console.log("category:", category)
-                  console.log("instructions:", instructions)
-                  console.log("ingredients:", ingredients)
-                }}>
+              <Button type="submit" className="sm:ml-auto" onClick={handleSubmit}>
                 Update Recipe
               </Button>
             </div>
