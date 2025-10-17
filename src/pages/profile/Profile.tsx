@@ -50,7 +50,7 @@ export default function Profile() {
       }
     }
     fetchUserRecipes()
-  }, [])
+  }, [user])
 
   const handleButtonClick = () => {
     fileInputRef.current?.click()
