@@ -7,6 +7,5 @@ export async function getUserById(userId: string): Promise<User | null> {
     console.error("Fehler beim Abrufen des Benutzers:", error)
     return null
   }
-  console.log(user)
   return user as User
 }

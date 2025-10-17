@@ -96,7 +96,7 @@ export default function Detail() {
           <div className="mb-8 md:mb-12">
             <div className="flex flex-wrap justify-between items-center gap-3 mb-4">
               {/* TODO: wrap in a Badge Component */}
-              {ingredients?.[0]?.recipes?.categories.name}
+              {ingredients?.[0]?.recipes?.categories?.name}
               {ingredients?.[0].recipes?.users?.id !== null && ingredients?.[0].recipes?.users?.id === user?.id && (
                 <Button
                   variant="outline"
@@ -124,7 +124,9 @@ export default function Detail() {
                 <Users className="w-5 h-5" />
                 <span>{ingredients?.[0]?.recipes?.servings} servings</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div
+                className="flex items-center gap-2 hover:text-foreground transition-colors cursor-pointer"
+                onClick={() => navigate(`/recipes/user/${ingredients?.[0]?.recipes?.users?.id}`)}>
                 <User className="w-5 h-5" />
                 <span>{ingredients?.[0]?.recipes?.users?.username || "Unknown"}</span>
               </div>
