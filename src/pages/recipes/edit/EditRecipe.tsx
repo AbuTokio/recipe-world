@@ -11,7 +11,7 @@ import { Button } from "../../../components/button/Button"
 import { useNavigate, useParams } from "react-router"
 import { getIngredientsByRecipeId } from "../../../functions/GetRecipes"
 import { ConfirmDialog } from "../../../components/confirm-dialog/ConfirmDialog"
-import { updateRecipe } from "../../../functions/AddRecipe"
+import { deleteRecipe, updateRecipe } from "../../../functions/AddRecipe"
 
 export default function EditRecipe() {
   const { recipeId } = useParams()
@@ -102,11 +102,10 @@ export default function EditRecipe() {
   }
 
   const handleDelete = () => {
-    // TODO add delete function
-    console.log("Deleting recipe:", recipeId)
-    toast.success("Recipe deleted successfully!")
-
-    // TODO: navigate to recipe detail page
+    deleteRecipe(recipeId!).then(() => {
+      toast.success("Recipe deleted successfully!")
+      navigate("/recipes")
+    })
   }
 
   useEffect(() => {

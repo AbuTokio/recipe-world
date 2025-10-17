@@ -74,3 +74,14 @@ export async function addIngredients(recipeId: string, ingredients: Ingredient[]
     }
   }
 }
+
+export async function deleteRecipe(recipeId: string) {
+  const { error: ingredientsError } = await supabase.from("ingredients").delete().eq("recipe_id", recipeId)
+  if (ingredientsError) {
+    console.error("Error on deleting ingredients:", ingredientsError)
+  }
+  const { error: recipeError } = await supabase.from("recipes").delete().eq("id", recipeId)
+  if (recipeError) {
+    console.error("Error on deleting recipe:", recipeError)
+  }
+}
