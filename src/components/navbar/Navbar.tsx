@@ -7,15 +7,15 @@ interface NavbarProps {
 }
 
 export default function Navbar({ className = null }: NavbarProps) {
-  const user = useUser()
+  const { user } = useUser()
 
   return (
     <nav className={`flex justify-center items-center w-full ${className !== null && className}`}>
       <NavItem label="Home" icon={House} />
       <NavItem label="Recipes" icon={CookingPot} />
       <NavItem label="About" icon={Building2} />
-      {user.user && <NavItem label="Profile" icon={User} />}
-      {!user.user && <NavItem label="Login" icon={User} />}
+      {user && user.img_url ? <NavItem label="Profile" img={user.img_url} /> : <NavItem label="Profile" icon={User} />}
+      {!user && <NavItem label="Login" icon={User} />}
     </nav>
   )
 }
