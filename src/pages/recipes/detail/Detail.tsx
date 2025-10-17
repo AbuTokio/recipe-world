@@ -96,20 +96,22 @@ export default function Detail() {
             <div className="flex flex-wrap justify-between items-center gap-3 mb-4">
               {/* TODO: wrap in a Badge Component */}
               {ingredients?.[0]?.recipes?.categories.name}
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => {
-                  // TODO: only allow edit if user is the author of the recipe
-                  if (user) navigate(`/recipes/edit/${recipeId}`)
-                  else {
-                    toast.error("Please log in to edit a recipe")
-                    navigate("/login")
-                  }
-                }}>
-                <Edit className="w-4 h-4 mr-2" />
-                Edit Recipe
-              </Button>
+              {ingredients?.[0].recipes?.users?.id !== null && ingredients?.[0].recipes?.users?.id === user?.id && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    // TODO: only allow edit if user is the author of the recipe
+                    if (user) navigate(`/recipes/edit/${recipeId}`)
+                    else {
+                      toast.error("Please log in to edit a recipe")
+                      navigate("/login")
+                    }
+                  }}>
+                  <Edit className="w-4 h-4 mr-2" />
+                  Edit Recipe
+                </Button>
+              )}
             </div>
 
             <h1 className="mb-4">{ingredients?.[0]?.recipes?.name}</h1>

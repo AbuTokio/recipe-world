@@ -1,4 +1,5 @@
 import type { Category } from "./Category"
+import type { User } from "./User"
 
 export interface Recipe {
   id: string
@@ -8,4 +9,5 @@ export interface Recipe {
   instructions: string
   categories: Category
   created_at: string
+  users: User
 }
