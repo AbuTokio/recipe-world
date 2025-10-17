@@ -121,8 +121,8 @@ export default function AddRecipe() {
         {/* Header */}
         <div className="container mx-auto px-4 md:px-6 lg:px-8 mb-6 md:mb-8">
           <button
-            // TODO: navigate back
-            className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-6">
+            className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-6 cursor-pointer"
+            onClick={() => navigate(-1)}>
             <ArrowLeft className="w-5 h-5" />
             <span>Back to Recipes</span>
           </button>
@@ -243,7 +243,7 @@ export default function AddRecipe() {
                         type="button"
                         onClick={() => removeIngredient(ingredient.id)}
                         disabled={ingredients.length === 1}
-                        className="w-10 h-10 flex items-center justify-center text-destructive hover:bg-destructive/10 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-10 h-10 flex items-center justify-center text-destructive hover:bg-destructive/10 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                         aria-label="Remove ingredient">
                         <X className="w-5 h-5" />
                       </button>
@@ -273,7 +273,7 @@ export default function AddRecipe() {
 
             {/* Actions */}
             <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-border">
-              <Button type="button" variant="outline">
+              <Button type="button" variant="outline" onClick={() => navigate(-1)}>
                 Cancel
               </Button>
               <Button type="submit" className="sm:ml-auto" onClick={handleSubmit}>

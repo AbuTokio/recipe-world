@@ -134,7 +134,9 @@ export default function EditRecipe() {
       <div className="min-h-screen bg-background">
         {/* Header */}
         <div className="container mx-auto px-4 md:px-6 lg:px-8 mb-6 md:mb-8">
-          <button className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-6">
+          <button
+            className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-6 cursor-pointer"
+            onClick={() => navigate(-1)}>
             <ArrowLeft className="w-5 h-5" />
             <span>Back to Recipe</span>
           </button>
@@ -267,7 +269,7 @@ export default function EditRecipe() {
                         type="button"
                         onClick={() => removeIngredient(ingredient.id)}
                         disabled={ingredients.length === 1}
-                        className="w-10 h-10 flex items-center justify-center text-destructive hover:bg-destructive/10 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-10 h-10 flex items-center justify-center text-destructive hover:bg-destructive/10 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                         aria-label="Remove ingredient">
                         <X className="w-5 h-5" />
                       </button>
