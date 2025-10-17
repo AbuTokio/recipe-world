@@ -11,6 +11,7 @@ import EditRecipe from "./pages/recipes/edit/EditRecipe"
 import Login from "./pages/login/Login"
 import Profile from "./pages/profile/Profile"
 import Favorites from "./pages/recipes/favorites/Favorites"
+import User from "./pages/recipes/user/User"
 
 export default function App() {
   const router = createBrowserRouter(
@@ -24,6 +25,7 @@ export default function App() {
         <Route path="recipes/add" element={<AddRecipe />} />
         <Route path="recipes/edit/:recipeId" element={<EditRecipe />} />
         <Route path="recipes/favorites" element={<Favorites />} />
+        <Route path="recipes/user/:userId" element={<User />} />
         <Route path="about" element={<About />} />
         <Route path="login" element={<Login />} />
         <Route path="profile" element={<Profile />} />

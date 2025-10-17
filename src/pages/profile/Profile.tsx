@@ -7,12 +7,15 @@ import { useNavigate } from "react-router"
 import { Button } from "../../components/button/Button"
 import Skeleton from "../../components/skeleton/Skeleton"
 import { uploadProfilePicture } from "../../functions/UploadPicture"
+import type { Recipe } from "../../interfaces/Recipe"
+import { getRecipesByUserId } from "../../functions/GetRecipes"
 
 export default function Profile() {
   const [isEditing, setIsEditing] = useState(false)
   const [loading, setLoading] = useState(true)
   const [profilePicture, setProfilePicture] = useState<File | null>(null)
   const [newUsername, setNewUsername] = useState("")
+  const [userRecipes, setUserRecipes] = useState<Recipe[]>([])
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const usernameChangeRef = useRef<HTMLInputElement | null>(null)
 
@@ -32,6 +35,22 @@ export default function Profile() {
     setLoading(true)
     setTimeout(() => setLoading(false), 1000)
   }, [user])
+
+  useEffect(() => {
+    if (profilePicture) {
+      handleUploadProfilePicture()
+    }
+  }, [profilePicture])
+
+  useEffect(() => {
+    const fetchUserRecipes = async () => {
+      if (user?.id) {
+        const userRecipes = await getRecipesByUserId(user.id)
+        setUserRecipes(userRecipes)
+      }
+    }
+    fetchUserRecipes()
+  }, [])
 
   const handleButtonClick = () => {
     fileInputRef.current?.click()
@@ -62,29 +81,17 @@ export default function Profile() {
     }
   }
 
-  useEffect(() => {
-    if (profilePicture) {
-      handleUploadProfilePicture()
-    }
-  }, [profilePicture])
+  const handleUsernameChange = async () => {
+    if (user && newUsername !== user.username) {
+      const { error } = await supabase.from("users").update({ username: newUsername }).eq("id", user.id)
 
-  useEffect(() => {
-    if (isEditing) {
-      usernameChangeRef.current?.focus()
-    } else if (user && newUsername !== user.username) {
-      supabase
-        .from("users")
-        .update({ username: newUsername })
-        .eq("id", user.id)
-        .then(({ error }) => {
-          if (error) {
-            console.error("Fehler beim Speichern", error)
-          } else {
-            setUser((prev) => (prev ? { ...prev, username: newUsername } : prev))
-          }
-        })
+      if (error) {
+        console.error("Fehler beim Speichern", error)
+      } else {
+        setUser((prev) => (prev ? { ...prev, username: newUsername } : prev))
+      }
     }
-  }, [isEditing])
+  }
 
   return (
     <div className="py-12 md:py-16 lg:py-20">
@@ -183,7 +190,12 @@ export default function Profile() {
                 <div className="flex gap-3">
                   <Button
                     className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-opacity flex items-center gap-2"
-                    onClick={() => setIsEditing(!isEditing)}>
+                    onClick={() => {
+                      if (isEditing) {
+                        handleUsernameChange()
+                      }
+                      setIsEditing(!isEditing)
+                    }}>
                     {isEditing ? (
                       <>
                         <Save className="w-4 h-4" />
@@ -191,7 +203,6 @@ export default function Profile() {
                       </>
                     ) : (
                       <>
-                        {" "}
                         <Settings className="w-4 h-4" />
                         <span className="hidden sm:inline">Settings</span>
                       </>
@@ -231,8 +242,9 @@ export default function Profile() {
                 </Button>
                 <Button
                   variant="ghost"
-                  className="flex flex-col aspect-square md:aspect-auto md:min-h-30 bg-card rounded-xl border border-border p-6 text-center">
-                  <div className="text-primary mb-2">18</div>
+                  className="flex flex-col aspect-square md:aspect-auto md:min-h-30 bg-card rounded-xl border border-border p-6 text-center"
+                  onClick={() => navigate(`/recipes/user/${user?.id}`)}>
+                  <div className="text-primary mb-2">{userRecipes.length}</div>
                   <p className="text-muted-foreground">Recipes Created</p>
                 </Button>
                 <Button
