@@ -103,7 +103,10 @@ export default function Profile() {
             <div className="bg-card rounded-2xl border border-border p-6 md:p-8 shadow-lg">
               <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
                 {/* Avatar */}
-                <div className="relative w-24 h-24 md:w-32 md:h-32 rounded-full bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center text-primary-foreground flex-shrink-0 overflow-hidden">
+                <div
+                  className={`relative w-24 h-24 md:w-32 md:h-32 rounded-full bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center text-primary-foreground flex-shrink-0 overflow-hidden ${
+                    user?.img_url && "border-2 border-primary"
+                  }`}>
                   {loading ? (
                     <Skeleton />
                   ) : user?.img_url ? (

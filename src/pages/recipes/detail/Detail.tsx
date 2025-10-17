@@ -127,7 +127,15 @@ export default function Detail() {
               <div
                 className="flex items-center gap-2 hover:text-foreground transition-colors cursor-pointer"
                 onClick={() => navigate(`/recipes/user/${ingredients?.[0]?.recipes?.users?.id}`)}>
-                <User className="w-5 h-5" />
+                {ingredients?.[0]?.recipes?.users?.img_url ? (
+                  <img
+                    src={ingredients?.[0]?.recipes?.users?.img_url}
+                    alt={"Avatar"}
+                    className="w-5 h-5 rounded-full object-cover border border-primary"
+                  />
+                ) : (
+                  <User className="w-5 h-5" />
+                )}
                 <span>{ingredients?.[0]?.recipes?.users?.username || "Unknown"}</span>
               </div>
               <div className="flex items-center gap-2">
