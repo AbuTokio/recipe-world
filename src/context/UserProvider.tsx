@@ -81,7 +81,7 @@ export default function UserProvider({ children }: { children: React.ReactNode }
     if (user) {
       fetchFavorites()
     }
-  }, [user])
+  }, [user?.id])
 
   const value: UserContextProps = {
     user,

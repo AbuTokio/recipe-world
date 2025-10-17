@@ -57,8 +57,6 @@ export async function getFavoriteRecipesByUserId(userId: string): Promise<Favori
 
   if (error) console.error(error)
 
-  console.log(items)
-
   return items as unknown as Favorite[]
 }
 // user 72eeed43-32c7-4366-acbc-355f503efa94
