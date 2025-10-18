@@ -11,7 +11,7 @@ export default function Header() {
       <Logo />
       {bp.isLg && (
         <div className="flex gap-12">
-          <Navbar />
+          <Navbar className="gap-4" />
           <ThemeToggle />
         </div>
       )}
