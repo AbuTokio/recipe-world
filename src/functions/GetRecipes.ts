@@ -22,7 +22,7 @@ export async function getRecipesFromCategory(categoryId: string): Promise<Recipe
 export async function getRecipesWithCategory(categoryId: string): Promise<Recipe[]> {
   const { data: recipes, error } = await supabase
     .from("recipes")
-    .select("id, name, description, servings, categories:category_id(*)")
+    .select("(*), categories:category_id(*)")
     .eq("category_id", categoryId)
 
   if (error) console.error(error)

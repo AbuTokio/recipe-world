@@ -116,7 +116,6 @@ export default function Profile() {
                   )}
                   {isEditing && (
                     <>
-                      {" "}
                       <input
                         type="file"
                         accept="image/*"
@@ -126,7 +125,7 @@ export default function Profile() {
                       />
                       <button
                         type="button"
-                        className="absolute bottom-0 left-0 right-0 bg-card-foreground text-muted text-xs px-2 py-1 rounded hover:bg-accent cursor-pointer"
+                        className="absolute bottom-0 left-0 right-0 bg-card-foreground text-muted text-xs px-2 py-1 rounded hover:bg-accent hover:text-card-foreground cursor-pointer"
                         onClick={handleButtonClick}>
                         Upload
                       </button>

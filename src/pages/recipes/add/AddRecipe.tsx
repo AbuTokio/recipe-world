@@ -1,5 +1,5 @@
 import { ArrowLeft, Plus, X } from "lucide-react"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import type { Ingredient } from "../../../interfaces/Ingredient"
 import { useMain, useUser } from "../../../hooks/ContextHooks"
 import toast from "react-hot-toast"
@@ -11,6 +11,7 @@ import { Button } from "../../../components/button/Button"
 import { addRecipe } from "../../../functions/AddRecipe"
 import { useNavigate } from "react-router"
 import supabase from "../../../utils/supabase"
+import { uploadRecipePicture } from "../../../functions/UploadPicture"
 
 export default function AddRecipe() {
   const [recipeName, setRecipeName] = useState("")
@@ -19,6 +20,9 @@ export default function AddRecipe() {
   const [category, setCategory] = useState("")
   const [instructions, setInstructions] = useState("")
   const [ingredients, setIngredients] = useState<Ingredient[]>([])
+  const [recipePicture, setRecipePicture] = useState<File | null>(null)
+
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
 
   const navigate = useNavigate()
 
@@ -105,10 +109,36 @@ export default function AddRecipe() {
         .eq("category_id", category)
         .single()
 
+      if (recipePicture) {
+        try {
+          console.log(recipePicture)
+          console.log(data?.id)
+
+          const imgUrl = await uploadRecipePicture(recipePicture, data?.id)
+
+          if (imgUrl) {
+            await supabase.from("recipes").update({ img_url: imgUrl }).eq("id", data?.id)
+          }
+        } catch (error) {
+          console.error("Fehler beim Foto upload", error)
+        }
+      }
+
       navigate(`/recipes/detail/${data?.id}`)
     }
 
     goToRecipe()
+  }
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file || !user) return
+
+    setRecipePicture(file)
+  }
+
+  const handleButtonClick = () => {
+    fileInputRef.current?.click()
   }
 
   useEffect(() => {
@@ -136,6 +166,35 @@ export default function AddRecipe() {
           <form
             onSubmit={handleSubmit}
             className="max-w-4xl mx-auto bg-card rounded-xl border border-border p-6 md:p-8 lg:p-10">
+            {/* Picture Upload */}
+            <div className="space-y-6 mb-8">
+              <h2 className="pb-2 border-b border-border">Recipe Photo</h2>
+
+              <div className="relative w-full h-48 md:h-92 lg:h-112 border-2 border-dashed border-border rounded-lg overflow-hidden flex items-center justify-center bg-muted/20 justify-self-center">
+                {recipePicture && (
+                  <img
+                    src={URL.createObjectURL(recipePicture)}
+                    alt="Recipe"
+                    className="absolute object-cover object-center w-full h-full"
+                  />
+                )}
+
+                <input
+                  type="file"
+                  accept="image/*"
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                  style={{ display: "none" }}
+                />
+                <button
+                  type="button"
+                  className="bottom-0 z-5 left-0 right-0 bg-card-foreground text-muted text-xs px-2 py-1 rounded hover:bg-accent hover:text-card-foreground cursor-pointer"
+                  onClick={handleButtonClick}>
+                  Select a picture
+                </button>
+              </div>
+            </div>
+
             {/* Basic Information */}
             <div className="space-y-6 mb-8">
               <h2 className="pb-2 border-b border-border">Basic Information</h2>

@@ -33,7 +33,7 @@ export default function Category() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {recipes.map((recipe) => (
-              <RecipeCard key={recipe.id} recipe={{ ...recipe }} imageUrl={`/img/recipes/${recipe.id}.webp`} />
+              <RecipeCard key={recipe.id} recipe={{ ...recipe }} />
             ))}
           </div>
         </div>

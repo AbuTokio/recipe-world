@@ -64,7 +64,7 @@ export default function User() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {userRecipes.map((rec) => (
-              <RecipeCard key={rec.id} recipe={{ ...rec }} imageUrl={`/img/recipes/${rec.id}.webp`} />
+              <RecipeCard key={rec.id} recipe={{ ...rec }} />
             ))}
           </div>
         </div>

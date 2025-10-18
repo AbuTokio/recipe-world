@@ -12,4 +12,5 @@ export interface Recipe {
   created_at?: string
   users?: User
   user_id: string | null
+  img_url?: string | null
 }

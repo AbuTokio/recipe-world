@@ -1,5 +1,5 @@
 import { Users, Heart, LoaderCircle } from "lucide-react"
-import { useEffect, useState } from "react"
+import { use, useEffect, useState } from "react"
 import { useNavigate } from "react-router"
 import type { Recipe } from "../../interfaces/Recipe"
 import { useUser } from "../../hooks/ContextHooks"
@@ -8,10 +8,9 @@ import { toggleFavorite } from "../../functions/ToggleFavorites"
 
 interface RecipeCardProps {
   recipe: Recipe
-  imageUrl: string
 }
 
-export function RecipeCard({ recipe, imageUrl }: RecipeCardProps) {
+export function RecipeCard({ recipe }: RecipeCardProps) {
   const [isFavorite, setIsFavorite] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
@@ -33,7 +32,7 @@ export function RecipeCard({ recipe, imageUrl }: RecipeCardProps) {
     }
     try {
       if (!user?.id) throw new Error("User ID is undefined")
-      await toggleFavorite(recipe.id, user.id)
+      await toggleFavorite(recipe.id!, user.id)
       setIsFavorite(!isFavorite)
       toast.success(isFavorite ? "Removed from favorites" : "Added to favorites")
     } catch (error) {
@@ -52,7 +51,7 @@ export function RecipeCard({ recipe, imageUrl }: RecipeCardProps) {
       <div className="relative aspect-[4/3] overflow-hidden bg-muted">
         <img
           onClick={handleCardClick}
-          src={imageUrl}
+          src={recipe.img_url || "https://placehold.co/640x640?text=no+image"}
           alt={recipe.name}
           className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500"
         />

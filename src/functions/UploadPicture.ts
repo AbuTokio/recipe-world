@@ -51,7 +51,9 @@ export async function uploadRecipePicture(file: File | null, recipeId: string) {
     return null
   }
 
-  const filePath = `${recipeId}/${file.name}`
+  const filePath = `${user.id}/${recipeId}/${file.name}`
+
+  console.log(filePath)
 
   const { error: storageError } = await supabase.storage.from("img-recipes").upload(filePath, file, {
     cacheControl: "3600",

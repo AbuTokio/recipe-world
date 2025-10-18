@@ -65,7 +65,7 @@ export default function Detail() {
       {/* Hero Image Section */}
       <div className="relative w-full h-[300px] md:h-[400px] lg:h-[500px] bg-muted">
         <img
-          src={`/img/recipes/${ingredients?.[0]?.recipes?.id}.webp`}
+          src={ingredients?.[0]?.recipes?.img_url || "https://placehold.co/640x640?text=no+image"}
           alt={ingredients?.[0]?.recipes?.name}
           className="w-full h-full object-cover"
         />
