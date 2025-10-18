@@ -14,7 +14,8 @@ export default function Navbar({ className = null }: NavbarProps) {
       <NavItem label="Home" icon={House} />
       <NavItem label="Recipes" icon={CookingPot} />
       <NavItem label="About" icon={Building2} />
-      {user && user.img_url ? <NavItem label="Profile" img={user.img_url} /> : <NavItem label="Profile" icon={User} />}
+      {user &&
+        (user.img_url ? <NavItem label="Profile" img={user.img_url} /> : <NavItem label="Profile" icon={User} />)}
       {!user && <NavItem label="Login" icon={User} />}
     </nav>
   )
