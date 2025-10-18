@@ -28,6 +28,7 @@ export function RecipeCard({ recipe }: RecipeCardProps) {
     setIsLoading(true)
     if (!user) {
       toast.error("Please log in to add favorites")
+      setIsLoading(false)
       return
     }
     try {
