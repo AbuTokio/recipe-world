@@ -39,12 +39,7 @@ export default function Recipes() {
           {/* Category Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
             {ctx.categories.map((category) => (
-              <CategoryCard
-                key={category.id}
-                name={category.name}
-                imageUrl={`/img/categories/${category.id}.webp`}
-                categoryId={category.id}
-              />
+              <CategoryCard key={category.id} category={{ ...category }} />
             ))}
           </div>
         </div>
