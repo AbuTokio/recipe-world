@@ -13,6 +13,7 @@ import Profile from "./pages/profile/Profile"
 import Favorites from "./pages/recipes/favorites/Favorites"
 import User from "./pages/recipes/user/User"
 import { NotFound } from "./pages/not-found/NotFound"
+import ProtectedRoute from "./utils/ProtectedRoute"
 
 export default function App() {
   const router = createBrowserRouter(
@@ -23,13 +24,41 @@ export default function App() {
         <Route path="recipes" element={<Recipes />} />
         <Route path="recipes/:categoryId" element={<Category />} />
         <Route path="recipes/detail/:recipeId" element={<Detail />} />
-        <Route path="recipes/add" element={<AddRecipe />} />
-        <Route path="recipes/edit/:recipeId" element={<EditRecipe />} />
-        <Route path="recipes/favorites" element={<Favorites />} />
+        <Route
+          path="recipes/add"
+          element={
+            <ProtectedRoute>
+              <AddRecipe />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="recipes/edit/:recipeId"
+          element={
+            <ProtectedRoute>
+              <EditRecipe />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="recipes/favorites"
+          element={
+            <ProtectedRoute>
+              <Favorites />
+            </ProtectedRoute>
+          }
+        />
         <Route path="recipes/user/:userId" element={<User />} />
         <Route path="about" element={<About />} />
         <Route path="login" element={<Login />} />
-        <Route path="profile" element={<Profile />} />
+        <Route
+          path="profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
         <Route path="*" element={<Navigate to="/404" replace />} />
         <Route path="/404" element={<NotFound />} />
       </Route>
