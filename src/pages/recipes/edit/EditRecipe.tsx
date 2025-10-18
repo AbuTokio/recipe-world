@@ -1,5 +1,5 @@
 import { ArrowLeft, Plus, Trash2, X } from "lucide-react"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import type { Ingredient } from "../../../interfaces/Ingredient"
 import { useMain, useUser } from "../../../hooks/ContextHooks"
 import toast from "react-hot-toast"
@@ -12,6 +12,8 @@ import { useNavigate, useParams } from "react-router"
 import { getIngredientsByRecipeId } from "../../../functions/GetRecipes"
 import { ConfirmDialog } from "../../../components/confirm-dialog/ConfirmDialog"
 import { deleteRecipe, updateRecipe } from "../../../functions/AddRecipe"
+import { uploadRecipePicture } from "../../../functions/UploadPicture"
+import supabase from "../../../utils/supabase"
 
 export default function EditRecipe() {
   const { recipeId } = useParams()
@@ -22,6 +24,10 @@ export default function EditRecipe() {
   const [instructions, setInstructions] = useState("")
   const [ingredients, setIngredients] = useState<Ingredient[]>([])
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [currentRecipePicture, setCurrentRecipePicture] = useState<string | null>(null)
+  const [recipePicture, setRecipePicture] = useState<File | null>(null)
+
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
 
   const navigate = useNavigate()
 
@@ -95,10 +101,32 @@ export default function EditRecipe() {
         user_id: user?.id || null,
       },
       ingredients
-    ).then(() => {
-      toast.success("Recipe updated successfully!")
-      navigate(`/recipes/detail/${recipeId}`)
-    })
+    )
+
+    const updatePicture = async () => {
+      if (recipePicture) {
+        try {
+          const imgUrl = await uploadRecipePicture(recipePicture, recipeId!)
+
+          if (imgUrl) {
+            await supabase.from("recipes").update({ img_url: imgUrl }).eq("id", recipeId)
+          }
+        } catch (error) {
+          console.error("Fehler beim Foto upload", error)
+        }
+      }
+    }
+
+    updatePicture()
+    toast.success("Recipe updated successfully!")
+    navigate(`/recipes/detail/${recipeId}`)
+  }
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file || !user) return
+
+    setRecipePicture(file)
   }
 
   const handleDelete = () => {
@@ -108,13 +136,11 @@ export default function EditRecipe() {
     })
   }
 
+  const handleButtonClick = () => {
+    fileInputRef.current?.click()
+  }
+
   useEffect(() => {
-    // recipeName,
-    // description,
-    // servings,
-    // category,
-    // instructions,
-    // ingredients
     if (recipeId) {
       const getData = async () => {
         const ingredients = await getIngredientsByRecipeId(recipeId)
@@ -123,6 +149,7 @@ export default function EditRecipe() {
         if (ingredients?.[0]?.recipes?.servings) setServings(String(ingredients?.[0]?.recipes?.servings))
         if (ingredients?.[0]?.recipes?.categories?.id) setCategory(ingredients?.[0]?.recipes?.categories.name)
         if (ingredients?.[0]?.recipes?.instructions) setInstructions(ingredients?.[0]?.recipes?.instructions)
+        if (ingredients?.[0]?.recipes?.img_url) setCurrentRecipePicture(ingredients?.[0]?.recipes?.img_url)
         if (ingredients) setIngredients(ingredients)
       }
       getData()
@@ -160,6 +187,41 @@ export default function EditRecipe() {
           <form
             onSubmit={handleSubmit}
             className="max-w-4xl mx-auto bg-card rounded-xl border border-border p-6 md:p-8 lg:p-10">
+            {/* Picture Upload */}
+            <div className="space-y-6 mb-8">
+              <h2 className="pb-2 border-b border-border">Recipe Photo</h2>
+
+              <div className="relative w-full h-48 md:h-92 lg:h-112 border-2 border-dashed border-border rounded-lg overflow-hidden flex items-center justify-center bg-muted/20 justify-self-center">
+                {currentRecipePicture && !recipePicture && (
+                  <img
+                    src={currentRecipePicture}
+                    alt="Current Recipe"
+                    className="absolute object-cover object-center w-full h-full"
+                  />
+                )}
+                {recipePicture && (
+                  <img
+                    src={URL.createObjectURL(recipePicture)}
+                    alt="Recipe"
+                    className="absolute object-cover object-center w-full h-full"
+                  />
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                  style={{ display: "none" }}
+                />
+                <button
+                  type="button"
+                  className="bottom-0 z-5 left-0 right-0 bg-card-foreground text-muted text-xs px-2 py-1 rounded hover:bg-accent hover:text-card-foreground cursor-pointer"
+                  onClick={handleButtonClick}>
+                  Select a picture
+                </button>
+              </div>
+            </div>
+
             {/* Basic Information */}
             <div className="space-y-6 mb-8">
               <h2 className="pb-2 border-b border-border">Basic Information</h2>
