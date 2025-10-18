@@ -1,5 +1,5 @@
 import { Users, Heart, LoaderCircle } from "lucide-react"
-import { use, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router"
 import type { Recipe } from "../../interfaces/Recipe"
 import { useUser } from "../../hooks/ContextHooks"
