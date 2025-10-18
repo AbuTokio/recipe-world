@@ -1,4 +1,4 @@
-import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from "react-router"
+import { createBrowserRouter, createRoutesFromElements, Navigate, Route, RouterProvider } from "react-router"
 import Layout from "./layout/Layout"
 import Home from "./pages/home/Home"
 import Splash from "./pages/splash/Splash"
@@ -12,6 +12,7 @@ import Login from "./pages/login/Login"
 import Profile from "./pages/profile/Profile"
 import Favorites from "./pages/recipes/favorites/Favorites"
 import User from "./pages/recipes/user/User"
+import { NotFound } from "./pages/not-found/NotFound"
 
 export default function App() {
   const router = createBrowserRouter(
@@ -29,7 +30,8 @@ export default function App() {
         <Route path="about" element={<About />} />
         <Route path="login" element={<Login />} />
         <Route path="profile" element={<Profile />} />
-        <Route path="*" element={<div>404 Not Found</div>} />
+        <Route path="*" element={<Navigate to="/404" replace />} />
+        <Route path="/404" element={<NotFound />} />
       </Route>
     )
   )

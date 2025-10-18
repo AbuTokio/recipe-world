@@ -10,7 +10,7 @@ export default function Layout() {
   const route = useLocation().pathname
   const hide = {
     header: ["/"],
-    hero: ["/recipes/detail/", "/"],
+    hero: ["/recipes/detail/", "/404", "/"],
     footer: ["/"],
   }
 
