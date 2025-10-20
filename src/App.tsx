@@ -24,41 +24,18 @@ export default function App() {
         <Route path="recipes" element={<Recipes />} />
         <Route path="recipes/:categoryId" element={<Category />} />
         <Route path="recipes/detail/:recipeId" element={<Detail />} />
-        <Route
-          path="recipes/add"
-          element={
-            <ProtectedRoute>
-              <AddRecipe />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="recipes/edit/:recipeId"
-          element={
-            <ProtectedRoute>
-              <EditRecipe />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="recipes/favorites"
-          element={
-            <ProtectedRoute>
-              <Favorites />
-            </ProtectedRoute>
-          }
-        />
+
+        {/* Geschützte Routen */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="recipes/add" element={<AddRecipe />} />
+          <Route path="recipes/edit/:recipeId" element={<EditRecipe />} />
+          <Route path="recipes/favorites" element={<Favorites />} />
+          <Route path="profile" element={<Profile />} />
+        </Route>
+
         <Route path="recipes/user/:userId" element={<User />} />
         <Route path="about" element={<About />} />
         <Route path="login" element={<Login />} />
-        <Route
-          path="profile"
-          element={
-            <ProtectedRoute>
-              <Profile />
-            </ProtectedRoute>
-          }
-        />
         <Route path="*" element={<Navigate to="/404" replace />} />
         <Route path="/404" element={<NotFound />} />
       </Route>
