@@ -14,6 +14,8 @@ import Favorites from "./pages/recipes/favorites/Favorites"
 import User from "./pages/user/User"
 import { NotFound } from "./pages/not-found/NotFound"
 import ProtectedRoute from "./utils/ProtectedRoute"
+import Followers from "./pages/profile/followers/Followers"
+import Following from "./pages/profile/following/Following"
 
 export default function App() {
   const router = createBrowserRouter(
@@ -30,6 +32,8 @@ export default function App() {
           <Route path="recipes/edit/:recipeId" element={<EditRecipe />} />
           <Route path="recipes/favorites" element={<Favorites />} />
           <Route path="profile" element={<Profile />} />
+          <Route path="profile/followers" element={<Followers />} />
+          <Route path="profile/following" element={<Following />} />
         </Route>
 
         <Route path="user/:userId" element={<User />} />

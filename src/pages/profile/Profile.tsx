@@ -264,12 +264,14 @@ export default function Profile() {
                   <p className="text-muted-foreground">Recipes Created</p>
                 </Button>
                 <Button
+                  onClick={() => navigate("/profile/followers")}
                   variant="ghost"
                   className="flex flex-col aspect-square md:aspect-auto md:min-h-30 bg-card rounded-xl border border-border p-6 text-center">
                   <div className="text-primary mb-2">{followers}</div>
                   <p className="text-muted-foreground">Followers</p>
                 </Button>
                 <Button
+                  onClick={() => navigate("/profile/following")}
                   variant="ghost"
                   className="flex flex-col aspect-square md:aspect-auto md:min-h-30 bg-card rounded-xl border border-border p-6 text-center">
                   <div className="text-primary mb-2">{following}</div>
