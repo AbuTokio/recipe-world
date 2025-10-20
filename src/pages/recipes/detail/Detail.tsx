@@ -127,7 +127,7 @@ export default function Detail() {
               </div>
               <div
                 className="flex items-center gap-2 hover:text-foreground transition-colors cursor-pointer"
-                onClick={() => navigate(`/recipes/user/${ingredients?.[0]?.recipes?.users?.id}`)}>
+                onClick={() => navigate(`/user/${ingredients?.[0]?.recipes?.users?.id}`)}>
                 {ingredients?.[0]?.recipes?.users?.img_url ? (
                   <img
                     src={ingredients?.[0]?.recipes?.users?.img_url}

@@ -11,7 +11,7 @@ import EditRecipe from "./pages/recipes/edit/EditRecipe"
 import Login from "./pages/login/Login"
 import Profile from "./pages/profile/Profile"
 import Favorites from "./pages/recipes/favorites/Favorites"
-import User from "./pages/recipes/user/User"
+import User from "./pages/user/User"
 import { NotFound } from "./pages/not-found/NotFound"
 import ProtectedRoute from "./utils/ProtectedRoute"
 
@@ -32,7 +32,7 @@ export default function App() {
           <Route path="profile" element={<Profile />} />
         </Route>
 
-        <Route path="recipes/user/:userId" element={<User />} />
+        <Route path="user/:userId" element={<User />} />
         <Route path="about" element={<About />} />
         <Route path="login" element={<Login />} />
         <Route path="*" element={<Navigate to="/404" replace />} />

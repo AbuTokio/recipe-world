@@ -9,6 +9,7 @@ import Skeleton from "../../components/skeleton/Skeleton"
 import { uploadProfilePicture } from "../../functions/UploadPicture"
 import type { Recipe } from "../../interfaces/Recipe"
 import { getRecipesByUserId } from "../../functions/GetRecipes"
+import { GetFollowers, GetFollowing } from "../../functions/GetFollowers"
 
 export default function Profile() {
   const [isEditing, setIsEditing] = useState(false)
@@ -16,6 +17,8 @@ export default function Profile() {
   const [profilePicture, setProfilePicture] = useState<File | null>(null)
   const [newUsername, setNewUsername] = useState("")
   const [userRecipes, setUserRecipes] = useState<Recipe[]>([])
+  const [followers, setFollowers] = useState<number>(0)
+  const [following, setFollowing] = useState<number>(0)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const usernameChangeRef = useRef<HTMLInputElement | null>(null)
 
@@ -31,6 +34,22 @@ export default function Profile() {
     navigate("/home")
   }
 
+  const fetchUserRecipes = async () => {
+    if (user?.id) {
+      const userRecipes = await getRecipesByUserId(user.id)
+      setUserRecipes(userRecipes)
+    }
+  }
+
+  const fetchFollowerData = async () => {
+    if (user?.id) {
+      const followersCount = await GetFollowers(user.id)
+      const followingCount = await GetFollowing(user.id)
+      setFollowers(followersCount.length)
+      setFollowing(followingCount.length)
+    }
+  }
+
   useEffect(() => {
     setLoading(true)
     setTimeout(() => setLoading(false), 1000)
@@ -43,13 +62,8 @@ export default function Profile() {
   }, [profilePicture])
 
   useEffect(() => {
-    const fetchUserRecipes = async () => {
-      if (user?.id) {
-        const userRecipes = await getRecipesByUserId(user.id)
-        setUserRecipes(userRecipes)
-      }
-    }
     fetchUserRecipes()
+    fetchFollowerData()
   }, [user])
 
   const handleButtonClick = () => {
@@ -252,13 +266,13 @@ export default function Profile() {
                 <Button
                   variant="ghost"
                   className="flex flex-col aspect-square md:aspect-auto md:min-h-30 bg-card rounded-xl border border-border p-6 text-center">
-                  <div className="text-primary mb-2">127</div>
+                  <div className="text-primary mb-2">{followers}</div>
                   <p className="text-muted-foreground">Followers</p>
                 </Button>
                 <Button
                   variant="ghost"
                   className="flex flex-col aspect-square md:aspect-auto md:min-h-30 bg-card rounded-xl border border-border p-6 text-center">
-                  <div className="text-primary mb-2">95</div>
+                  <div className="text-primary mb-2">{following}</div>
                   <p className="text-muted-foreground">Following</p>
                 </Button>
               </>
