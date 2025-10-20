@@ -2,7 +2,7 @@ import { ArrowLeft, User as UserIcon, UserPlus, UserCheck, LoaderCircle } from "
 import { useEffect, useState } from "react"
 import type { Followers } from "../../../interfaces/Followers"
 import type { User } from "../../../interfaces/User"
-import { useNavigate } from "react-router"
+import { useNavigate, useParams } from "react-router"
 import { useUser } from "../../../hooks/ContextHooks"
 import { Follow, GetFollowing, Unfollow } from "../../../functions/GetFollowers"
 import { getUserById } from "../../../functions/GetUser"
@@ -12,12 +12,15 @@ export default function Following() {
   const [followers, setFollowers] = useState<User[]>([])
   const [following, setFollowing] = useState<Followers[]>([])
   const [loadingFollowState, setLoadingFollowState] = useState<string | boolean>(false)
+  const [isOwnPage, setIsOwnPage] = useState(false)
+  const [pageOwner, setPageOwner] = useState<User | null>(null)
 
   const navigate = useNavigate()
   const { user } = useUser()
+  const { userId } = useParams()
 
-  const fetchFollowerData = async () => {
-    const followers = await GetFollowing(user?.id!)
+  const fetchFollowerData = async (userId: string) => {
+    const followers = await GetFollowing(userId)
     const detailedFollowers = followers.map(async (follower) => {
       const userData: User = (await getUserById(follower.followed_by)) as User
       return userData
@@ -36,13 +39,34 @@ export default function Following() {
     } else {
       await Follow(user.id, targetUserId)
     }
-    await fetchFollowerData()
+    if (isOwnPage) {
+      fetchFollowerData(user?.id!)
+    } else {
+      fetchPageOwner()
+      fetchFollowerData(userId!)
+    }
     setLoadingFollowState(false)
   }
 
+  const fetchPageOwner = async () => {
+    const ownerData = (await getUserById(userId!)) as User
+    setPageOwner(ownerData)
+  }
+
+  const handleUserClick = (targetUserId: string) => {
+    navigate(`/user/${targetUserId}`)
+  }
+
   useEffect(() => {
-    fetchFollowerData()
-  }, [user?.id])
+    if (userId && user?.id && userId === user?.id) setIsOwnPage(true)
+    if (!userId && user?.id) setIsOwnPage(true)
+    if (isOwnPage) {
+      fetchFollowerData(user?.id!)
+    } else {
+      fetchPageOwner()
+      fetchFollowerData(userId!)
+    }
+  }, [userId, user?.id, isOwnPage])
 
   return (
     <>
@@ -54,13 +78,15 @@ export default function Following() {
               onClick={() => navigate(-1)}
               className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-4 cursor-pointer">
               <ArrowLeft className="w-5 h-5" />
-              <span>Back to Profile</span>
+              <span>Back to {!isOwnPage && `${pageOwner?.username}'s`} Profile</span>
             </button>
 
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="mb-2">Following</h1>
-                <p className="text-muted-foreground">You are following {followers.length} people</p>
+                <h1 className="mb-2">{!isOwnPage && `${pageOwner?.username}`} Following</h1>
+                <p className="text-muted-foreground">
+                  {!isOwnPage ? `${pageOwner?.username} follows` : "You follow"} {followers.length} people
+                </p>
               </div>
             </div>
           </div>
@@ -79,9 +105,10 @@ export default function Following() {
                   <div className="flex items-start gap-4">
                     {/* Avatar */}
                     <div
-                      className={`relative w-16 h-16 rounded-full bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center text-primary-foreground flex-shrink-0 overflow-hidden ${
+                      className={`relative w-16 h-16 rounded-full bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center text-primary-foreground flex-shrink-0 overflow-hidden cursor-pointer ${
                         follower?.img_url && "border-2 border-primary"
-                      }`}>
+                      }`}
+                      onClick={() => handleUserClick(follower.id!)}>
                       {follower.img_url ? (
                         <img src={follower.img_url} alt="Avatar" className="w-full h-full object-cover rounded-full" />
                       ) : (
@@ -92,7 +119,9 @@ export default function Following() {
                     {/* User Info */}
                     <div className="flex-1 min-w-0">
                       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-2">
-                        <div>
+                        <div
+                          className="hover:text-primary-light cursor-pointer"
+                          onClick={() => handleUserClick(follower.id!)}>
                           <h3 className="mb-1">
                             {follower.firstname} {follower.lastname}
                           </h3>
@@ -100,22 +129,24 @@ export default function Following() {
                         </div>
 
                         {/* Follow Button */}
-                        <Button
-                          onClick={() => handleFollowToggle(follower.id!)}
-                          variant={following.find((f) => f.followed_by === follower.id) ? "secondary" : "primary"}
-                          size="md">
-                          {following.find((f) => f.followed_by === follower.id) ? (
-                            loadingFollowState === follower.id ? (
+                        {user?.id !== follower.id && (
+                          <Button
+                            onClick={() => handleFollowToggle(follower.id!)}
+                            variant={following.find((f) => f.followed_by === follower.id) ? "secondary" : "primary"}
+                            size="md">
+                            {following.find((f) => f.followed_by === follower.id) ? (
+                              loadingFollowState === follower.id ? (
+                                <LoaderCircle className="w-4 h-4 animate-spin" />
+                              ) : (
+                                <UserCheck className="w-4 h-4" />
+                              )
+                            ) : loadingFollowState === follower.id ? (
                               <LoaderCircle className="w-4 h-4 animate-spin" />
                             ) : (
-                              <UserCheck className="w-4 h-4" />
-                            )
-                          ) : loadingFollowState === follower.id ? (
-                            <LoaderCircle className="w-4 h-4 animate-spin" />
-                          ) : (
-                            <UserPlus className="w-4 h-4" />
-                          )}
-                        </Button>
+                              <UserPlus className="w-4 h-4" />
+                            )}
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -127,16 +158,28 @@ export default function Following() {
             {followers.length === 0 && (
               <div className="text-center py-16">
                 <div className="w-20 h-20 rounded-full bg-muted mx-auto mb-4 flex items-center justify-center">
-                  {user?.img_url ? (
-                    <img src={user.img_url} alt="Avatar" className="w-full h-full object-cover rounded-full" />
+                  {isOwnPage ? (
+                    <>
+                      {user?.img_url ? (
+                        <img src={user.img_url} alt="Avatar" className="w-full h-full object-cover rounded-full" />
+                      ) : (
+                        <UserIcon className="w-10 h-10 text-foreground" />
+                      )}
+                    </>
                   ) : (
-                    <UserIcon className="w-10 h-10 text-foreground" />
+                    <>
+                      {pageOwner?.img_url ? (
+                        <img src={pageOwner.img_url} alt="Avatar" className="w-full h-full object-cover rounded-full" />
+                      ) : (
+                        <UserIcon className="w-10 h-10 text-foreground" />
+                      )}
+                    </>
                   )}
                 </div>
-                <h3 className="mb-2">No Followers Yet</h3>
-                <p className="text-muted-foreground mb-6">Share your recipes to gain followers!</p>
-                <Button onClick={() => navigate("/recipes/add")} variant="primary">
-                  Create a Recipe
+                <h3 className="mb-2">No Followings Yet</h3>
+                <p className="text-muted-foreground mb-6">Explore some recipes to find people to follow!</p>
+                <Button onClick={() => navigate("/recipes")} variant="primary">
+                  Explore Recipes
                 </Button>
               </div>
             )}

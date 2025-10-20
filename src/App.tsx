@@ -32,8 +32,8 @@ export default function App() {
           <Route path="recipes/edit/:recipeId" element={<EditRecipe />} />
           <Route path="recipes/favorites" element={<Favorites />} />
           <Route path="profile" element={<Profile />} />
-          <Route path="profile/followers" element={<Followers />} />
-          <Route path="profile/following" element={<Following />} />
+          <Route path="user/:userId/followers" element={<Followers />} />
+          <Route path="user/:userId/following" element={<Following />} />
         </Route>
 
         <Route path="user/:userId" element={<User />} />

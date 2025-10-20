@@ -187,13 +187,21 @@ export default function User() {
                     </Button>
                     <Button
                       variant="ghost"
-                      className="flex flex-col aspect-square md:aspect-auto md:min-h-30 bg-card rounded-xl border border-border p-6 text-center">
+                      className="flex flex-col aspect-square md:aspect-auto md:min-h-30 bg-card rounded-xl border border-border p-6 text-center"
+                      onClick={() => {
+                        if (user?.id) navigate(`/user/${pageOwner?.id}/followers`)
+                        else toast.error("You need to be logged in to view followers")
+                      }}>
                       <div className="text-primary mb-2">{followers.length}</div>
                       <p className="text-muted-foreground">Followers</p>
                     </Button>
                     <Button
                       variant="ghost"
-                      className="flex flex-col aspect-square md:aspect-auto md:min-h-30 bg-card rounded-xl border border-border p-6 text-center">
+                      className="flex flex-col aspect-square md:aspect-auto md:min-h-30 bg-card rounded-xl border border-border p-6 text-center"
+                      onClick={() => {
+                        if (user?.id) navigate(`/user/${pageOwner?.id}/following`)
+                        else toast.error("You need to be logged in to view following")
+                      }}>
                       <div className="text-primary mb-2">{following.length}</div>
                       <p className="text-muted-foreground">Following</p>
                     </Button>
