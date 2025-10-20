@@ -120,44 +120,46 @@ export default function User() {
                 </div>
               </div>
 
-              <div className="flex gap-3">
-                <Button
-                  className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-opacity flex items-center gap-2"
-                  onClick={async () => {
-                    if (!user?.id || !pageOwner?.id) return
-                    setLoadingFollowState(true)
-                    if (followingUser) {
-                      await Unfollow(user.id, pageOwner.id)
-                      setFollowingUser(false)
-                    } else {
-                      await Follow(user.id, pageOwner.id)
-                      setFollowingUser(true)
-                    }
-                    const followers = await GetFollowers(pageOwner.id)
-                    setFollowers(followers)
-                    setLoadingFollowState(false)
-                  }}>
-                  <>
-                    {!followingUser &&
-                      (loadingFollowState ? (
-                        <LoaderCircle className="w-4 h-4 animate-spin" />
-                      ) : (
-                        <Plus className="w-4 h-4" />
-                      ))}
-                    <span className="hidden sm:inline">
-                      {followingUser ? (
-                        loadingFollowState ? (
+              {!isOwnPage && (
+                <div className="flex gap-3">
+                  <Button
+                    className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-opacity flex items-center gap-2"
+                    onClick={async () => {
+                      if (!user?.id || !pageOwner?.id) return
+                      setLoadingFollowState(true)
+                      if (followingUser) {
+                        await Unfollow(user.id, pageOwner.id)
+                        setFollowingUser(false)
+                      } else {
+                        await Follow(user.id, pageOwner.id)
+                        setFollowingUser(true)
+                      }
+                      const followers = await GetFollowers(pageOwner.id)
+                      setFollowers(followers)
+                      setLoadingFollowState(false)
+                    }}>
+                    <>
+                      {!followingUser &&
+                        (loadingFollowState ? (
                           <LoaderCircle className="w-4 h-4 animate-spin" />
                         ) : (
-                          "Unfollow"
-                        )
-                      ) : (
-                        "Follow"
-                      )}
-                    </span>
-                  </>
-                </Button>
-              </div>
+                          <Plus className="w-4 h-4" />
+                        ))}
+                      <span className="hidden sm:inline">
+                        {followingUser ? (
+                          loadingFollowState ? (
+                            <LoaderCircle className="w-4 h-4 animate-spin" />
+                          ) : (
+                            "Unfollow"
+                          )
+                        ) : (
+                          "Follow"
+                        )}
+                      </span>
+                    </>
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
 

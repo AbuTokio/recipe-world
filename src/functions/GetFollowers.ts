@@ -22,18 +22,22 @@ export async function GetFollowing(userId: string): Promise<Followers[]> {
 }
 
 export async function Follow(userId: string, targetUserId: string): Promise<void> {
-  const { error } = await supabase.from("followers").insert({
-    follower: userId,
-    followed_by: targetUserId,
-  })
-  if (error) {
-    console.error("Error following user:", error)
+  if (userId !== targetUserId) {
+    const { error } = await supabase.from("followers").insert({
+      follower: userId,
+      followed_by: targetUserId,
+    })
+    if (error) {
+      console.error("Error following user:", error)
+    }
   }
 }
 
 export async function Unfollow(userId: string, targetUserId: string): Promise<void> {
-  const { error } = await supabase.from("followers").delete().eq("follower", userId).eq("followed_by", targetUserId)
-  if (error) {
-    console.error("Error unfollowing user:", error)
+  if (userId !== targetUserId) {
+    const { error } = await supabase.from("followers").delete().eq("follower", userId).eq("followed_by", targetUserId)
+    if (error) {
+      console.error("Error unfollowing user:", error)
+    }
   }
 }
