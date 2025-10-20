@@ -259,7 +259,7 @@ export default function Profile() {
                 <Button
                   variant="ghost"
                   className="flex flex-col aspect-square md:aspect-auto md:min-h-30 bg-card rounded-xl border border-border p-6 text-center"
-                  onClick={() => navigate(`/recipes/user/${user?.id}`)}>
+                  onClick={() => navigate(`/user/${user?.id}`)}>
                   <div className="text-primary mb-2">{userRecipes.length}</div>
                   <p className="text-muted-foreground">Recipes Created</p>
                 </Button>
