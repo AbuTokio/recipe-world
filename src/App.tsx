@@ -25,7 +25,6 @@ export default function App() {
         <Route path="recipes/:categoryId" element={<Category />} />
         <Route path="recipes/detail/:recipeId" element={<Detail />} />
 
-        {/* Geschützte Routen */}
         <Route element={<ProtectedRoute />}>
           <Route path="recipes/add" element={<AddRecipe />} />
           <Route path="recipes/edit/:recipeId" element={<EditRecipe />} />
