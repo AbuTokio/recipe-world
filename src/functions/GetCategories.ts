@@ -8,3 +8,10 @@ export async function getCategories(): Promise<Category[]> {
 
   return categories as Category[]
 }
+
+export async function getCategoryById(categoryId: string): Promise<Category | null> {
+  const { data: category, error } = await supabase.from("categories").select("*").eq("id", categoryId).single()
+  if (error) console.error(error)
+
+  return category as Category
+}

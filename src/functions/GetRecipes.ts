@@ -27,6 +27,8 @@ export async function getRecipesWithCategory(categoryId: string): Promise<Recipe
 
   if (error) console.error(error)
 
+  console.log(recipes)
+
   return recipes as unknown as Recipe[]
 }
 
