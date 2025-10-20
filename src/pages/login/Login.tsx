@@ -1,15 +1,18 @@
-import React, { useRef, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import toast from "react-hot-toast"
 import { Button } from "../../components/button/Button"
 import { Eye, EyeOff, Lock, Mail, User } from "lucide-react"
 import supabase from "../../utils/supabase"
 import { useNavigate } from "react-router"
+import { useUser } from "../../hooks/ContextHooks"
 
 export default function Login() {
   const [isLogin, setIsLogin] = useState(true)
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate()
   const formRef = useRef<HTMLFormElement>(null)
+
+  const { user } = useUser()
 
   const handleLogin = async (loginData: { email: string; password: string }) => {
     try {
@@ -124,6 +127,10 @@ export default function Login() {
     formRef.current?.reset()
     setShowPassword(false)
   }
+
+  useEffect(() => {
+    if (user?.id) navigate("/profile")
+  }, [user?.id])
 
   return (
     <section className="py-12 md:py-16 lg:py-20">
