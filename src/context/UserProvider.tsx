@@ -34,7 +34,6 @@ export default function UserProvider({ children }: { children: React.ReactNode }
       if (error) console.error("Fehler beim Laden des Users:", error)
       else setUser(userData?.[0])
     }
-    console.log(user)
   }
 
   useEffect(() => {
@@ -72,7 +71,6 @@ export default function UserProvider({ children }: { children: React.ReactNode }
   const fetchFavorites = async () => {
     if (user?.id) {
       const result = await getFavoriteRecipesByUserId(user.id)
-      console.log(result)
       setFavorites(result)
     }
   }

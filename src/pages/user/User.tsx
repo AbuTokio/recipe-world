@@ -171,17 +171,13 @@ export default function User() {
                   <>
                     <Button
                       variant="ghost"
-                      className="flex flex-col aspect-square md:aspect-auto md:min-h-30 bg-card rounded-xl border border-border p-6 text-center"
-                      // onClick={() => navigate("/recipes/favorites")}
-                    >
+                      className="flex flex-col aspect-square md:aspect-auto md:min-h-30 bg-card rounded-xl border border-border p-6 text-center">
                       <div className="text-primary mb-2">{favorites}</div>
                       <p className="text-muted-foreground">Recipes Saved</p>
                     </Button>
                     <Button
                       variant="ghost"
-                      className="flex flex-col aspect-square md:aspect-auto md:min-h-30 bg-card rounded-xl border border-border p-6 text-center"
-                      // onClick={() => navigate(`/recipes/user/${user?.id}`)}
-                    >
+                      className="flex flex-col aspect-square md:aspect-auto md:min-h-30 bg-card rounded-xl border border-border p-6 text-center">
                       <div className="text-primary mb-2">{userRecipes.length}</div>
                       <p className="text-muted-foreground">Recipes Created</p>
                     </Button>

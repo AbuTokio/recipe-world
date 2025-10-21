@@ -78,8 +78,6 @@ export default function Profile() {
   }
 
   async function handleUploadProfilePicture() {
-    console.log(profilePicture)
-    console.log(user)
     if (!profilePicture || !user) return null
 
     try {

@@ -55,7 +55,6 @@ export default function Detail() {
     }
   }, [recipeId])
 
-  // Parse instructions into steps
   const instructionSteps = ingredients?.[0]?.recipes?.instructions
     .split(/\d+\./)
     .filter((step) => step.trim().length > 0)

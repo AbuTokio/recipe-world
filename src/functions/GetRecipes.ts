@@ -27,8 +27,6 @@ export async function getRecipesWithCategory(categoryId: string): Promise<Recipe
 
   if (error) console.error(error)
 
-  console.log(recipes)
-
   return recipes as unknown as Recipe[]
 }
 
@@ -61,9 +59,3 @@ export async function getFavoriteRecipesByUserId(userId: string): Promise<Favori
 
   return items as unknown as Favorite[]
 }
-// user 72eeed43-32c7-4366-acbc-355f503efa94
-// favorites_id 0c403d31-260a-4cfc-8d5f-d2ed11e7be7f
-
-// 00d3d413-c091-4cf5-9404-e872940cff0b
-// 0ee7f7a7-9a80-4df4-b4a9-5b857fc56c11
-// 16ca1eab-f478-4afd-b91c-b1b23c9c8ddf

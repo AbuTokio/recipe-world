@@ -39,14 +39,6 @@ export default function Login() {
     lastname: string
   }) => {
     try {
-      console.log(
-        "Signup data:",
-        signUpData.email,
-        signUpData.password,
-        signUpData.username,
-        signUpData.firstname,
-        signUpData.lastname
-      )
       const { error } = await supabase.auth.signUp({
         email: signUpData.email,
         password: signUpData.password,
@@ -84,7 +76,6 @@ export default function Login() {
     }
 
     if (isLogin) {
-      // Login validation
       if (!formValues.email.trim()) {
         toast.error("Please enter your email")
         return
@@ -96,7 +87,6 @@ export default function Login() {
 
       await handleLogin(formValues)
     } else {
-      // Signup validation
       if (!formValues.firstname.trim() || !formValues.lastname.trim()) {
         toast.error("Please enter your name")
         return

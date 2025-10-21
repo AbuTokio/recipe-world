@@ -62,7 +62,6 @@ export default function EditRecipe() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
-    // Validation
     if (!recipeName.trim()) {
       toast.error("Please enter a recipe name")
       return

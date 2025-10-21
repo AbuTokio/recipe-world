@@ -34,8 +34,6 @@ export async function uploadProfilePicture(file: File | null) {
     return null
   }
 
-  console.log("Bild erfolgreich hochgeladen:", signedUrlData.signedUrl)
-
   return signedUrlData.signedUrl
 }
 
@@ -52,8 +50,6 @@ export async function uploadRecipePicture(file: File | null, recipeId: string) {
   }
 
   const filePath = `${user.id}/${recipeId}/${file.name}`
-
-  console.log(filePath)
 
   const { error: storageError } = await supabase.storage.from("img-recipes").upload(filePath, file, {
     cacheControl: "3600",
@@ -74,8 +70,6 @@ export async function uploadRecipePicture(file: File | null, recipeId: string) {
     console.error("Fehler beim Erstellen der Signed URL:", signedUrlError)
     return null
   }
-
-  console.log("Bild erfolgreich hochgeladen:", signedUrlData.signedUrl)
 
   return signedUrlData.signedUrl
 }

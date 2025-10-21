@@ -55,7 +55,6 @@ export default function AddRecipe() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
-    // Validation
     if (!recipeName.trim()) {
       toast.error("Please enter a recipe name")
       return
@@ -111,9 +110,6 @@ export default function AddRecipe() {
 
       if (recipePicture) {
         try {
-          console.log(recipePicture)
-          console.log(data?.id)
-
           const imgUrl = await uploadRecipePicture(recipePicture, data?.id)
 
           if (imgUrl) {
