@@ -320,7 +320,7 @@ Building Recipe World provided hands-on experience with:
 
 **Bünyamin Kara** (AbuTokio)
 
-I'm a passionate developer currently attending a coding bootcamp to transition from a successful automotive career into professional software development. My journey in coding began at age 14 as a self-taught programmer, and after working in various roles in the automotive industry (mechanic, system operator, process engineering, and KAIZEN specialist), I decided in early 2025 to pursue my true passion.
+I'm a passionate developer currently attending a coding bootcamp to transition from a successful automotive career into professional software development. My journey in coding began at age 14 as a self-taught programmer, and after working in various roles in the automotive industry (mechanic, system operator, process engineering, and KAIZEN specialist), I decided in early 2025 to pursue my true passion and mid 2025 started to visit a bootcamp.
 
 ### Background
 
@@ -394,12 +394,8 @@ This project is open source and available for educational purposes.
 
 ## 🙏 Acknowledgments
 
-- **Coding Bootcamp** - For providing the learning environment and project requirements
-- **Supabase** - For the excellent backend-as-a-service platform
-- **shadcn/ui** - For the beautiful UI component library
-- **Tailwind CSS** - For the powerful utility-first CSS framework
-- **Lucide Icons** - For the comprehensive icon library
-- **Recipe Community** - For inspiration and recipe ideas
+- **SuperCode GmbH & Co. KG** - For providing the learning environment and project requirements
+- **[FaridTvK](https://github.com/FaridTvK)** - For the excellent work as our main trainer at SuperCode
 
 ---
 
