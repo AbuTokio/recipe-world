@@ -1,4 +1,4 @@
-import { ArrowLeft, Code, Heart, Rocket, Wrench, Target, BookOpen, Sparkles } from "lucide-react"
+import { Code, Heart, Rocket, Wrench, Target, BookOpen, Sparkles } from "lucide-react"
 import { useNavigate } from "react-router"
 
 export default function About() {
@@ -7,16 +7,9 @@ export default function About() {
   return (
     <>
       {/* Header */}
-      <section className="bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5 py-8 md:py-12 border-b border-border">
+      <section className="py-12 md:py-16 lg:py-20 border-b border-border">
         <div className="container mx-auto px-4 md:px-6 lg:px-8">
-          <div className="max-w-4xl mx-auto">
-            <button
-              onClick={() => navigate("/home")}
-              className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-4 cursor-pointer">
-              <ArrowLeft className="w-5 h-5" />
-              <span>Back to Home</span>
-            </button>
-
+          <div className="mx-auto">
             <div className="flex items-start gap-4">
               <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
                 <Heart className="w-6 h-6 text-primary" />
